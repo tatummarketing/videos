@@ -1,0 +1,17 @@
+Our Smart Wallets are now available to builders worldwide!
+
+If you're building a multi-chain app, Web3 onboarding has usually meant high costs, fragmented vendors, and managing keys chain by chain. We've changed that.
+
+https://tatum.io/products/wallets
+
+Here's what makes it a game changer for businesses:
+
+1 Client = Multi-Chain: user gets access across EVM, Solana, Bitcoin, Tron & more (no paying per-chain!)
+
+MPC Security: Independent key shares; zero exposed private keys
+
+Gas Sponsorship: Seamless, frictionless Web2-like onboarding
+
+Dual-Curve Ready: Native SECP256K1 & ED25519 support (Ethereum & EVM + Bitcoin, Tron, Solana...)
+
+Best of all, it sits natively alongside our RPC nodes, Data APIs, and Webhooks.

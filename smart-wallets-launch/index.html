@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Tatum — Access Smart Wallets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"
+        }
+      }
+    </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body, #root {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        font-family: "Poppins", sans-serif;
+      }
+      #root {
+        position: relative;
+        background: #0b0c14;
+        container-type: size;
+      }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-color: transparent;
+        background-image: radial-gradient(rgba(91, 61, 245, 0.34) 1.25px, transparent 1.25px);
+        background-size: 22px 22px;
+        -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 0%, #000 38%, transparent 80%);
+        mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, #000 0%, #000 38%, transparent 80%);
+      }
+
+      #plateA { background: #0b0c14; will-change: transform; }
+      #globe3d {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        display: block;
+      }
+      #earthNightTex {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 8px;
+        height: 4px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #chromeIntro { pointer-events: none; }
+      #cornerLogo, #flowLogo {
+        position: absolute;
+        top: 36px;
+        left: 40px;
+        z-index: 30;
+        width: 196px;
+        height: auto;
+        display: block;
+        will-change: transform;
+      }
+
+      #introScrim {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(11, 12, 20, 0.62) 0%, rgba(11, 12, 20, 0.24) 58%, transparent 100%);
+      }
+      #introType {
+        position: absolute;
+        left: 56px;
+        top: 360px;
+        width: 980px;
+        z-index: 12;
+      }
+      #introHeadline {
+        font-size: 88px;
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -0.04em;
+        color: #ffffff;
+        text-shadow: 0 8px 28px rgba(11, 12, 20, 0.55);
+      }
+      #introHeadline .line { display: block; padding: 6px 0; }
+      #introHeadline .word {
+        display: inline-block;
+        opacity: 0;
+        margin-right: 0.28em;
+      }
+      #introHeadline .word:last-child { margin-right: 0; }
+
+      #flow { background: #f6f5fb; }
+      #flowInner {
+        position: absolute;
+        inset: 0;
+        will-change: transform;
+      }
+      #stage {
+        position: absolute;
+        left: 40px;
+        top: 140px;
+        width: 1040px;
+        height: 860px;
+        perspective: 1400px;
+        z-index: 3;
+        will-change: transform;
+      }
+      #copy {
+        position: absolute;
+        left: 1120px;
+        top: 240px;
+        width: 720px;
+        z-index: 4;
+        will-change: transform;
+      }
+      .beat { position: absolute; left: 0; top: 0; width: 720px; will-change: transform; }
+      .beat h2 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 88px;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        line-height: 1;
+        color: #181d27;
+      }
+      .beat h2 .line {
+        display: block;
+        line-height: 1;
+      }
+
+      #mpcStage {
+        position: absolute;
+        left: 40px;
+        top: 80px;
+        width: 960px;
+        height: 700px;
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+      #keyRig {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+      }
+      #keyBody {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 420px;
+        height: 214px;
+        margin-left: -210px;
+        margin-top: -107px;
+        will-change: transform;
+      }
+      .key-half {
+        position: absolute;
+        inset: 0;
+        filter: drop-shadow(16px 22px 28px rgba(24, 29, 39, 0.22));
+        will-change: transform;
+      }
+      #keyHalfA { clip-path: polygon(0 0, 62% 0, 38% 100%, 0 100%); }
+      #keyHalfB { clip-path: polygon(62% 0, 100% 0, 100% 100%, 38% 100%); }
+      .key-half img {
+        width: 420px;
+        height: 214px;
+        display: block;
+      }
+      .shard {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 280px;
+        margin-left: -140px;
+        margin-top: -78px;
+        padding: 28px 26px;
+        border-radius: 22px;
+        background: #181d27;
+        will-change: transform;
+        transform-style: preserve-3d;
+      }
+      .shard .k {
+        font-family: "Geist Mono", monospace;
+        font-size: 16px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #a19afe;
+      }
+      .shard b { display: block; margin-top: 8px; font-size: 32px; color: #f7f8fc; }
+      .shard span { display: block; margin-top: 6px; font-size: 18px; color: rgba(247,248,252,0.7); }
+      #mpcLink {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 88px;
+        height: 12px;
+        margin-left: -44px;
+        margin-top: -6px;
+        border-radius: 999px;
+        background: #2ccd9a;
+        transform-origin: 50% 50%;
+        will-change: transform;
+        z-index: 7;
+      }
+      #mpcSign {
+        position: absolute;
+        left: 50%;
+        top: 72%;
+        width: 240px;
+        height: 92px;
+        margin-left: -120px;
+        margin-top: 0;
+        border-radius: 999px;
+        background: #ecfdf3;
+        border: 4px solid #2ccd9a;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        will-change: transform;
+        z-index: 9;
+      }
+      #mpcSign b {
+        font-family: "Geist Mono", monospace;
+        font-size: 22px;
+        letter-spacing: 0.08em;
+        color: #067647;
+      }
+      #mpcSign span {
+        font-size: 22px;
+        font-weight: 700;
+        color: #181d27;
+      }
+
+      #chainOrbit {
+        position: absolute;
+        left: 250px;
+        top: 160px;
+        width: 540px;
+        height: 540px;
+        border-radius: 999px;
+        border: 2px dashed rgba(79, 55, 253, 0.32);
+        transform-origin: 50% 50%;
+        will-change: transform;
+        z-index: 11;
+      }
+      .fx {
+        position: absolute;
+        left: 520px;
+        top: 430px;
+        will-change: transform;
+        z-index: 12;
+      }
+      .cpill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 28px;
+        border-radius: 999px;
+        background: #181d27;
+        font-family: "Geist Mono", monospace;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: #f7f8fc;
+        will-change: transform;
+      }
+      .cpill img { width: 32px; height: 32px; display: block; }
+      #chainHub {
+        position: absolute;
+        left: 400px;
+        top: 310px;
+        width: 240px;
+        height: 240px;
+        border-radius: 999px;
+        background: #4f37fd;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 24px 48px rgba(79, 55, 253, 0.28);
+        will-change: transform;
+        z-index: 14;
+      }
+      #chainHub svg {
+        width: 96px;
+        height: 96px;
+        display: block;
+      }
+      #chainHub span {
+        margin-top: 8px;
+        font-family: "Geist Mono", monospace;
+        font-size: 16px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      #gasRig {
+        position: absolute;
+        left: 140px;
+        top: 36px;
+        width: 760px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        will-change: transform;
+      }
+      #gasToggleCol { width: 280px; flex-shrink: 0; }
+      .switch {
+        position: relative;
+        width: 280px;
+        height: 132px;
+        border-radius: 999px;
+        background: #d5d7da;
+      }
+      .knob {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 108px;
+        height: 108px;
+        border-radius: 999px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(24, 29, 39, 0.16);
+        will-change: transform;
+      }
+      #gasLabel {
+        margin-top: 18px;
+        text-align: center;
+        font-family: "Geist Mono", monospace;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #067647;
+        will-change: transform;
+      }
+      #gasArrow {
+        width: 48px;
+        height: 64px;
+        color: #4f37fd;
+        will-change: transform;
+      }
+      #gasArrow svg { display: block; width: 48px; height: 64px; }
+      #gasZero {
+        text-align: center;
+        will-change: transform;
+      }
+      #gasZero .gz-num {
+        display: block;
+        font-size: 200px;
+        font-weight: 800;
+        letter-spacing: -0.08em;
+        line-height: 0.85;
+        color: #4f37fd;
+        font-variant-numeric: tabular-nums;
+        transform-origin: 50% 50%;
+      }
+      #gasZero .gz-who {
+        display: block;
+        margin-top: 8px;
+        font-size: 32px;
+        font-weight: 600;
+        color: #181d27;
+      }
+
+      .rate {
+        position: absolute;
+        width: 480px;
+        min-height: 280px;
+        padding: 48px 44px;
+        border-radius: 28px;
+        background: #ffffff;
+        border: 2px solid #d5d7da;
+        will-change: transform;
+      }
+      #rateTx { left: 40px; top: 160px; }
+      #rateWal { left: 520px; top: 280px; }
+      .rate .k {
+        font-family: "Geist Mono", monospace;
+        font-size: 22px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #4f37fd;
+      }
+      .rate b {
+        display: block;
+        margin-top: 16px;
+        font-size: 88px;
+        font-weight: 800;
+        letter-spacing: -0.06em;
+        line-height: 1;
+        color: #4f37fd;
+      }
+
+      #end {
+        background: #f6f5fb;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      #endLogo { width: 480px; height: auto; display: block; }
+      #endLine {
+        margin-top: 28px;
+        font-size: 46px;
+        font-weight: 600;
+        color: #181d27;
+      }
+      #endLine em { font-style: normal; color: #4f37fd; }
+      #endUrl {
+        margin-top: 18px;
+        font-family: "Geist Mono", monospace;
+        font-size: 24px;
+        color: #3a3f49;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-at0g" id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-mysu" id="plateA" class="clip" data-start="0" data-duration="3.45" data-track-index="0" data-layout-allow-overflow="true">
+        <img data-hf-id="hf-mhxc" id="earthNightTex" src="assets/earth-night.jpg" alt="" width="3600" height="1800">
+        <canvas data-hf-id="hf-3yam" id="globe3d" width="1920" height="1080"></canvas>
+      </div>
+
+      <div data-hf-id="hf-i720" id="chromeIntro" class="clip" data-start="0" data-duration="3.4" data-track-index="1">
+        <img data-hf-id="hf-daxw" id="cornerLogo" src="assets/tatum-logo-white.svg" alt="Tatum">
+      </div>
+
+      <section data-hf-id="hf-hs8k" id="intro" class="clip" data-start="0" data-duration="3.35" data-track-index="2" data-layout-allow-overlap="true" data-layout-allow-overflow="true">
+        <div data-hf-id="hf-s8hh" id="introScrim"></div>
+        <div data-hf-id="hf-8kz5" id="introType">
+          <p data-hf-id="hf-4l5e" id="introHeadline"><span data-hf-id="hf-6c9z" class="line"><span data-hf-id="hf-xkqs" class="word" id="w0">Access</span><span data-hf-id="hf-wz4u" class="word" id="w1">Tatum</span></span><span data-hf-id="hf-tvt3" class="line"><span data-hf-id="hf-vk49" class="word" id="w2">Smart</span><span data-hf-id="hf-jg3d" class="word" id="w3">Wallets</span></span></p>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-r2lh" id="flow" class="clip" data-start="3.15" data-duration="13.75" data-track-index="3" data-layout-allow-overflow="true" data-layout-allow-overlap="true" data-layout-allow-occlusion="true">
+        <div data-hf-id="hf-0nxr" id="flowInner">
+        <div data-hf-id="hf-qqr5" class="hero-grid"></div>
+        <img data-hf-id="hf-thvd" id="flowLogo" src="assets/tatum-logo-color.svg" alt="Tatum">
+
+        <div data-hf-id="hf-1rt5" id="stage">
+          <div data-hf-id="hf-0py5" id="mpcStage">
+            <div data-hf-id="hf-r0ds" id="keyRig">
+              <div data-hf-id="hf-zjc6" id="keyBody">
+                <div data-hf-id="hf-t8j4" class="key-half" id="keyHalfA"><img data-hf-id="hf-v2x9" src="assets/key.svg" alt="" width="420" height="214"></div>
+                <div data-hf-id="hf-1wez" class="key-half" id="keyHalfB"><img data-hf-id="hf-bjr5" src="assets/key.svg" alt="" width="420" height="214"></div>
+              </div>
+            </div>
+            <div data-hf-id="hf-rmss" class="shard" id="onShardA">
+              <div data-hf-id="hf-7lqt" class="k">Share A</div>
+              <b data-hf-id="hf-mc4z">Device</b>
+              <span data-hf-id="hf-zk5z">Stays with the user</span>
+            </div>
+            <div data-hf-id="hf-2iaf" class="shard" id="onShardB">
+              <div data-hf-id="hf-8snw" class="k">Share B</div>
+              <b data-hf-id="hf-xpqj">Portal</b>
+              <span data-hf-id="hf-rsz8">Held by Tatum</span>
+            </div>
+            <div data-hf-id="hf-o87p" id="mpcLink"></div>
+            <div data-hf-id="hf-yv2i" id="mpcSign">
+              <b data-hf-id="hf-64qy">2-of-2</b>
+              <span data-hf-id="hf-b7pt">Signed</span>
+            </div>
+          </div>
+
+          <div data-hf-id="hf-gtas" id="chainOrbit"></div>
+          <div data-hf-id="hf-ix2p" id="chainHub">
+            <svg data-hf-id="hf-9vww" viewBox="0 0 64 64" aria-hidden="true">
+              <circle data-hf-id="hf-3l6b" cx="32" cy="20" r="12" fill="#fff" />
+              <path data-hf-id="hf-ke0a" d="M10 58c0-12.15 9.85-22 22-22s22 9.85 22 22" fill="#fff" />
+            </svg>
+            <span data-hf-id="hf-8n4a">client</span>
+          </div>
+
+          <div data-hf-id="hf-7v9h" class="cpill fx" id="cEth"><img data-hf-id="hf-zy76" src="assets/chains/ethereum.svg" alt="">ETH</div>
+          <div data-hf-id="hf-eb9t" class="cpill fx" id="cSol"><img data-hf-id="hf-n16t" src="assets/chains/solana.svg" alt="">SOL</div>
+          <div data-hf-id="hf-4ulp" class="cpill fx" id="cBtc"><img data-hf-id="hf-5iqh" src="assets/chains/bitcoin.svg" alt="">BTC</div>
+          <div data-hf-id="hf-gljb" class="cpill fx" id="cTron"><img data-hf-id="hf-bqd8" src="assets/chains/tron.svg" alt="">TRON</div>
+          <div data-hf-id="hf-taa5" class="cpill fx" id="cPol"><img data-hf-id="hf-sq8d" src="assets/chains/polygon.svg" alt="">POL</div>
+          <div data-hf-id="hf-t4ch" class="cpill fx" id="cArb"><img data-hf-id="hf-tuu7" src="assets/chains/arbitrum.svg" alt="">ARB</div>
+          <div data-hf-id="hf-g0m7" class="cpill fx" id="cOp"><img data-hf-id="hf-iqyn" src="assets/chains/optimism.svg" alt="">OP</div>
+          <div data-hf-id="hf-lrtx" class="cpill fx" id="cAvax"><img data-hf-id="hf-hudw" src="assets/chains/avalanche.svg" alt="">AVAX</div>
+          <div data-hf-id="hf-oo1h" class="cpill fx" id="cBnb"><img data-hf-id="hf-k6i1" src="assets/chains/bnb-smart-chain.svg" alt="">BNB</div>
+
+          <div data-hf-id="hf-rugy" id="gasRig">
+            <div data-hf-id="hf-kk3u" id="gasToggleCol">
+              <div data-hf-id="hf-ohb9" class="switch" id="gasSwitch"><div data-hf-id="hf-hqsx" class="knob" id="gasKnob"></div></div>
+              <div data-hf-id="hf-jzs5" id="gasLabel">Sponsored</div>
+            </div>
+            <div data-hf-id="hf-kktf" id="gasArrow">
+              <svg data-hf-id="hf-rm7v" viewBox="0 0 48 64" fill="none">
+                <path data-hf-id="hf-l9do" d="M24 6v40M10 32l14 22 14-22" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div data-hf-id="hf-xrsm" id="gasZero">
+              <span data-hf-id="hf-2bnu" class="gz-num" id="gasNum">$0</span>
+              <span data-hf-id="hf-a0wq" class="gz-who">gas for the end user</span>
+            </div>
+          </div>
+
+          <div data-hf-id="hf-ioxa" class="rate" id="rateTx">
+            <div data-hf-id="hf-x8ne" class="k">Per transaction</div>
+            <b data-hf-id="hf-h2j3">$0.20</b>
+          </div>
+          <div data-hf-id="hf-m8qa" class="rate" id="rateWal">
+            <div data-hf-id="hf-6gin" class="k">Per wallet</div>
+            <b data-hf-id="hf-f4q0">$0.135</b>
+          </div>
+        </div>
+
+        <div data-hf-id="hf-5l42" id="copy">
+          <div data-hf-id="hf-ug5h" class="beat" id="b1">
+            <h2 data-hf-id="hf-2l5r"><span data-hf-id="hf-ftw8" class="line">MPC key</span><span data-hf-id="hf-xjvb" class="line">shares</span></h2>
+          </div>
+          <div data-hf-id="hf-ye9i" class="beat" id="b2">
+            <h2 data-hf-id="hf-gavz"><span data-hf-id="hf-0ddg" class="line">One client,</span><span data-hf-id="hf-wimz" class="line">every chain</span></h2>
+          </div>
+          <div data-hf-id="hf-2cdj" class="beat" id="b3">
+            <h2 data-hf-id="hf-fwky"><span data-hf-id="hf-r84g" class="line">Gas</span><span data-hf-id="hf-gk25" class="line">sponsorship</span></h2>
+          </div>
+          <div data-hf-id="hf-6ahk" class="beat" id="b4">
+            <h2 data-hf-id="hf-1w50">Lowest price</h2>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <section data-hf-id="hf-xm7p" id="end" class="clip" data-start="16.8" data-duration="3.2" data-track-index="4" data-layout-allow-occlusion="true">
+        <div data-hf-id="hf-wd7p" class="hero-grid"></div>
+        <img data-hf-id="hf-s0c2" id="endLogo" src="assets/tatum-logo-color.svg" alt="Tatum">
+        <div data-hf-id="hf-9eoa" id="endLine">Build with <em data-hf-id="hf-wigs">Smart Wallets.</em></div>
+        <div data-hf-id="hf-oxhg" id="endUrl">tatum.io/products/wallets</div>
+      </section>
+
+      <audio id="vo-intro" data-start="0.2" data-duration="2" src="assets/vo/intro.mp3" data-track-index="6"></audio>
+      <audio id="vo-beat1" data-start="3.4" data-duration="5.15" src="assets/vo/beat1.mp3" data-track-index="7"></audio>
+      <audio id="vo-beat2" data-start="8.6" data-duration="3.72" src="assets/vo/beat2.mp3" data-track-index="8"></audio>
+      <audio id="vo-beat3" data-start="12.4" data-duration="3.9" src="assets/vo/beat3.mp3" data-track-index="9"></audio>
+      <audio id="vo-beat4" data-start="14.2" data-duration="3.53" src="assets/vo/beat4.mp3" data-track-index="10"></audio>
+      <audio id="vo-outro" data-start="17.8" data-duration="2" src="assets/vo/outro.mp3" data-track-index="11"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.eventCallback("onUpdate", () => {
+        if (window.__renderGlobeAt) window.__renderGlobeAt(tl.time());
+      });
+
+      const hidden = [
+        "#b1", "#b2", "#b3", "#b4",
+        "#cEth", "#cSol", "#cBtc", "#cTron", "#cPol", "#cArb", "#cOp", "#cAvax", "#cBnb",
+        "#onShardA", "#onShardB", "#keyBody", "#mpcStage", "#mpcSign", "#mpcLink",
+        "#chainOrbit", "#chainHub", "#gasRig", "#gasLabel", "#gasArrow", "#gasZero",
+        "#flowLogo", "#rateTx", "#rateWal",
+      ];
+      gsap.set(hidden, { opacity: 0 });
+      gsap.set("#gasKnob", { x: 0 });
+      gsap.set("#endLogo", { opacity: 0, y: 18 });
+      gsap.set("#endLine", { opacity: 0, y: 18 });
+      gsap.set("#endUrl", { opacity: 0, y: 12 });
+      gsap.set(".word", { opacity: 0, y: 0 });
+      gsap.set("#gasNum", { scale: 0.38 });
+      gsap.set("#stage", { x: 0 });
+      gsap.set("#copy", { x: 0 });
+
+      tl.fromTo("#cornerLogo", { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.24, ease: "power4.out" }, 0.05);
+
+      const F = 1 / 60;
+      const words = [
+        { id: "#w0", y: 46, d: 0.15 },
+        { id: "#w1", y: 46, d: 0.15 },
+        { id: "#w2", y: 50, d: 0.15 },
+        { id: "#w3", y: 50, d: 0.15 },
+      ];
+      let wt = 0.16;
+      words.forEach((w, i) => {
+        tl.set(w.id, { opacity: 1, y: w.y }, wt);
+        tl.to(w.id, { y: 0, duration: w.d, ease: "power4.out" }, wt);
+        wt = wt + w.d - (i === 0 ? 0 : F);
+      });
+
+      tl.to("#introType", { y: 28, opacity: 0, duration: 0.28, ease: "power2.in" }, 3.08);
+      tl.to("#cornerLogo", { opacity: 0, duration: 0.2, ease: "power2.in" }, 3.08);
+      tl.set("#cornerLogo", { opacity: 0 }, 3.3);
+      tl.to("#plateA", { scale: 1.08, opacity: 0, duration: 0.32, ease: "power2.in" }, 3.05);
+
+      tl.fromTo("#flowLogo", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.24, ease: "power3.out" }, 3.2);
+      tl.fromTo("#mpcStage", { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }, 3.22);
+      tl.fromTo("#b1", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 3.28);
+      tl.fromTo("#keyBody", { scale: 0.55, rotateY: 32, rotateX: 14, z: -40, opacity: 0 }, { scale: 1, rotateY: 22, rotateX: 10, z: 24, opacity: 1, duration: 0.32, ease: "back.out(1.5)" }, 3.34);
+      tl.to("#mpcStage", { scale: 1.28, duration: 0.5, ease: "power2.inOut" }, 3.55);
+      tl.to("#keyHalfA", { x: -48, y: -26, rotate: -11, duration: 0.32, ease: "power3.inOut" }, 3.72);
+      tl.to("#keyHalfB", { x: 48, y: 26, rotate: 11, duration: 0.32, ease: "power3.inOut" }, 3.72);
+      tl.to("#keyBody", { opacity: 0, duration: 0.16, ease: "power2.in" }, 4.18);
+      tl.fromTo("#onShardA", { x: 0, y: 0, z: -24, rotateY: 42, scale: 0.82, opacity: 0 }, { x: -210, y: -16, z: 36, rotateY: 16, scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" }, 4.24);
+      tl.fromTo("#onShardB", { x: 0, y: 0, z: -24, rotateY: -42, scale: 0.82, opacity: 0 }, { x: 210, y: 18, z: 36, rotateY: -16, scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" }, 4.3);
+      tl.to("#mpcStage", { scale: 1, duration: 0.5, ease: "power3.out" }, 4.72);
+      tl.to("#onShardA", { y: -20, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.8);
+      tl.to("#onShardB", { y: 18, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.8);
+      tl.to("#onShardA", { x: -168, y: 0, rotateY: 6, duration: 0.5, ease: "power3.inOut", overwrite: "auto" }, 6.02);
+      tl.to("#onShardB", { x: 168, y: 0, rotateY: -6, duration: 0.5, ease: "power3.inOut", overwrite: "auto" }, 6.02);
+      tl.fromTo("#mpcLink", { scaleX: 0.12, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.28, ease: "power3.out" }, 6.28);
+      tl.to(["#onShardA", "#onShardB"], { scale: 1.05, duration: 0.16, yoyo: true, repeat: 1, ease: "power2.out" }, 6.32);
+      tl.fromTo("#mpcSign", { y: 18, scale: 0.82, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.36, ease: "back.out(1.6)" }, 6.4);
+
+      tl.to(["#b1", "#mpcStage", "#onShardA", "#onShardB", "#mpcSign", "#mpcLink"], { opacity: 0, duration: 0.22, ease: "power2.in" }, 8.28);
+      tl.set(["#b1", "#mpcStage"], { opacity: 0 }, 8.48);
+      tl.set("#stage", { x: 800 }, 8.48);
+      tl.set("#copy", { x: -1064 }, 8.48);
+      tl.fromTo("#b2", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 8.52);
+      tl.fromTo("#chainOrbit", { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, 8.52);
+      tl.fromTo("#chainHub", { scale: 0.72, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.34, ease: "back.out(1.5)" }, 8.54);
+      tl.fromTo("#cEth", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: -340, y: -210, scale: 1, opacity: 1, duration: 0.36, ease: "power3.out" }, 8.52);
+      tl.fromTo("#cSol", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: 340, y: -200, scale: 1, opacity: 1, duration: 0.36, ease: "power3.out" }, 8.56);
+      tl.fromTo("#cBtc", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: -290, y: 230, scale: 1, opacity: 1, duration: 0.36, ease: "power3.out" }, 8.6);
+      tl.fromTo("#cTron", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: 270, y: 250, scale: 1, opacity: 1, duration: 0.36, ease: "power3.out" }, 8.64);
+      tl.fromTo("#cPol", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: -350, y: -24, scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 8.68);
+      tl.fromTo("#cArb", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: 330, y: 28, scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 8.72);
+      tl.fromTo("#cOp", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: -180, y: -350, scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 8.76);
+      tl.fromTo("#cAvax", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: 200, y: -350, scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 8.8);
+      tl.fromTo("#cBnb", { x: 0, y: 0, scale: 0.6, opacity: 0 }, { x: -280, y: 320, scale: 1, opacity: 1, duration: 0.34, ease: "power3.out" }, 8.84);
+      tl.to("#cEth", { y: -226, duration: 0.48, ease: "sine.inOut", yoyo: true, repeat: 2 }, 8.92);
+      tl.to("#cSol", { y: -216, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 8.98);
+      tl.to("#cBtc", { y: 246, duration: 0.46, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.04);
+      tl.to("#cTron", { y: 266, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.08);
+      tl.to("#cPol", { y: -40, duration: 0.48, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.12);
+      tl.to("#cArb", { y: 44, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.16);
+      tl.to("#cOp", { y: -366, duration: 0.46, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.2);
+      tl.to("#cAvax", { y: -366, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.24);
+      tl.to("#cBnb", { y: 336, duration: 0.48, ease: "sine.inOut", yoyo: true, repeat: 2 }, 9.28);
+
+      const chainSet = ["#b2", "#chainOrbit", "#chainHub", "#cEth", "#cSol", "#cBtc", "#cTron", "#cPol", "#cArb", "#cOp", "#cAvax", "#cBnb"];
+      tl.to(chainSet, { opacity: 0, duration: 0.2, ease: "power2.in", overwrite: "auto" }, 11.12);
+      tl.set(chainSet, { opacity: 0 }, 11.32);
+      tl.set("#stage", { x: 0 }, 11.32);
+      tl.set("#copy", { x: 0 }, 11.32);
+      tl.fromTo("#b3", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 11.36);
+      tl.fromTo("#gasRig", { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.32, ease: "power3.out" }, 11.4);
+      tl.to("#gasKnob", { x: 148, duration: 0.22, ease: "power2.out" }, 11.62);
+      tl.set("#gasSwitch", { backgroundColor: "#2ccd9a" }, 11.62);
+      tl.fromTo("#gasLabel", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "power3.out" }, 11.72);
+      tl.fromTo("#gasArrow", { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "power3.out" }, 11.82);
+      tl.fromTo("#gasZero", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, 11.92);
+      tl.to("#gasNum", { scale: 1, duration: 0.42, ease: "back.out(1.6)" }, 11.94);
+
+      tl.to(["#b3", "#gasRig"], { opacity: 0, duration: 0.2, ease: "power2.in" }, 13.88);
+      tl.set(["#b3", "#gasRig"], { opacity: 0 }, 14.08);
+      tl.set("#stage", { x: 800 }, 14.08);
+      tl.set("#copy", { x: -1064 }, 14.08);
+      tl.fromTo("#b4", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 14.12);
+      tl.fromTo("#rateTx", { x: -36, rotateY: 14, opacity: 0 }, { x: 0, rotateY: 0, opacity: 1, duration: 0.36, ease: "power3.out" }, 14.24);
+      tl.fromTo("#rateWal", { x: 36, rotateY: -14, opacity: 0 }, { x: 0, rotateY: 0, opacity: 1, duration: 0.36, ease: "power3.out" }, 14.36);
+
+      tl.to("#flowInner", { opacity: 0, duration: 0.22, ease: "power2.in" }, 16.58);
+      tl.set("#flowInner", { opacity: 0 }, 16.8);
+      tl.to("#flowLogo", { opacity: 0, duration: 0.16, ease: "power2.in" }, 16.58);
+      tl.set("#flowLogo", { opacity: 0 }, 16.8);
+
+      tl.fromTo("#endLogo", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 16.88);
+      tl.fromTo("#endLine", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.32, ease: "power3.out" }, 17.12);
+      tl.to("#endLine", { opacity: 0, duration: 0.2, ease: "power2.in" }, 18.55);
+      tl.fromTo("#endUrl", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.24, ease: "power2.out" }, 18.7);
+
+      window.__timelines["main"] = tl;
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { Line2 } from "three/addons/lines/Line2.js";
+      import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+      import { LineMaterial } from "three/addons/lines/LineMaterial.js";
+
+      const canvas = document.getElementById("globe3d");
+      const img = document.getElementById("earthNightTex");
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: true });
+      renderer.setSize(1920, 1080, false);
+      renderer.setPixelRatio(1);
+      renderer.setClearColor(0x0b0c14, 1);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(35, 1920 / 1080, 0.1, 40);
+      camera.position.set(-0.55, 0, 4.9);
+      camera.lookAt(1.05, 0.08, 0);
+
+      const globe = new THREE.Group();
+      globe.position.set(1.05, 0.1, 0);
+      scene.add(globe);
+      const flowMats = [];
+
+      function latLon(lat, lon, r) {
+        const phi = (90 - lat) * Math.PI / 180;
+        const theta = (lon + 180) * Math.PI / 180;
+        return new THREE.Vector3(
+          -r * Math.sin(phi) * Math.cos(theta),
+          r * Math.cos(phi),
+          r * Math.sin(phi) * Math.sin(theta)
+        );
+      }
+
+      function makeArc(from, to, color, width) {
+        const axis = new THREE.Vector3().copy(from).cross(to);
+        if (axis.lengthSq() < 1e-8) return;
+        axis.normalize();
+        const angle = from.angleTo(to);
+        const pos = [];
+        const n = 48;
+        for (let i = 0; i <= n; i++) {
+          const t = i / n;
+          const q = new THREE.Quaternion().setFromAxisAngle(axis, angle * t);
+          const p = from.clone().applyQuaternion(q).normalize();
+          const lift = 1.045 + 0.075 * Math.sin(Math.PI * t);
+          pos.push(p.x * lift, p.y * lift, p.z * lift);
+        }
+        const geo = new LineGeometry();
+        geo.setPositions(pos);
+        const mat = new LineMaterial({
+          color,
+          linewidth: width,
+          dashed: true,
+          dashSize: 0.09,
+          gapSize: 0.05,
+          transparent: true,
+          opacity: 0.92,
+          depthTest: true,
+          resolution: new THREE.Vector2(1920, 1080),
+        });
+        const line = new Line2(geo, mat);
+        line.computeLineDistances();
+        globe.add(line);
+        flowMats.push(mat);
+      }
+
+      function setup(texImg) {
+        const tex = new THREE.Texture(texImg);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.needsUpdate = true;
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        globe.add(new THREE.Mesh(
+          new THREE.SphereGeometry(1, 96, 64),
+          new THREE.MeshStandardMaterial({
+            map: tex,
+            emissiveMap: tex,
+            emissive: new THREE.Color(0xffb978),
+            emissiveIntensity: 0.9,
+            roughness: 0.94,
+            metalness: 0.04,
+          })
+        ));
+        globe.add(new THREE.Mesh(
+          new THREE.SphereGeometry(1.07, 64, 48),
+          new THREE.ShaderMaterial({
+            uniforms: { glowColor: { value: new THREE.Color(0x3aa7ff) } },
+            vertexShader: "varying vec3 vNormal; varying vec3 vWorldPos; void main(){ vNormal=normalize(normalMatrix*normal); vec4 wp=modelMatrix*vec4(position,1.0); vWorldPos=wp.xyz; gl_Position=projectionMatrix*viewMatrix*wp; }",
+            fragmentShader: "varying vec3 vNormal; varying vec3 vWorldPos; uniform vec3 glowColor; void main(){ vec3 viewDir=normalize(cameraPosition-vWorldPos); float rim=pow(max(0.0,0.7-dot(vNormal,viewDir)),3.6); gl_FragColor=vec4(glowColor,1.0)*rim; }",
+            side: THREE.BackSide,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            depthWrite: false,
+          })
+        ));
+        globe.add(new THREE.LineSegments(
+          new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(1.018, 2)),
+          new THREE.LineBasicMaterial({ color: 0xd9eeff, transparent: true, opacity: 0.2 })
+        ));
+        const cities = [
+          [40.7, -74], [37.8, -122.4], [19.4, -99.1], [-23.55, -46.63],
+          [51.5, -0.12], [52.5, 13.4], [48.86, 2.35], [6.52, 3.38],
+          [-26.2, 28.05], [30.04, 31.24], [25.2, 55.27], [19.08, 72.88],
+          [1.35, 103.82], [35.68, 139.69], [31.23, 121.47], [-33.87, 151.21],
+        ];
+        const links = [
+          [0, 4], [0, 3], [0, 13], [1, 13], [1, 15], [1, 12],
+          [2, 3], [3, 8], [4, 7], [4, 10], [4, 12], [5, 11],
+          [6, 9], [7, 8], [7, 11], [8, 10], [9, 10], [10, 12],
+          [11, 12], [12, 13], [13, 14], [13, 15], [0, 5], [3, 15],
+        ];
+        const nodeGeo = new THREE.SphereGeometry(0.012, 12, 10);
+        for (let i = 0; i < cities.length; i++) {
+          const p = latLon(cities[i][0], cities[i][1], 1.012);
+          const node = new THREE.Mesh(nodeGeo, new THREE.MeshBasicMaterial({ color: i % 2 === 0 ? 0x2ccd9a : 0x3bc7ff }));
+          node.position.copy(p);
+          globe.add(node);
+        }
+        for (let i = 0; i < links.length; i++) {
+          const a = latLon(cities[links[i][0]][0], cities[links[i][0]][1], 1);
+          const b = latLon(cities[links[i][1]][0], cities[links[i][1]][1], 1);
+          makeArc(a, b, i % 2 === 0 ? 0x3bc7ff : 0x2ccd9a, i % 3 === 0 ? 2.4 : 1.8);
+        }
+        scene.add(new THREE.AmbientLight(0x0b1220, 0.55));
+        scene.add(new THREE.HemisphereLight(0x1a3a6a, 0x000000, 0.45));
+        const sun = new THREE.DirectionalLight(0x9ecbff, 1.35);
+        sun.position.set(-3.2, 0.35, 1.1);
+        scene.add(sun);
+      }
+
+      function renderAt(time) {
+        globe.rotation.y = -Math.PI / 2 + time * 0.08;
+        globe.rotation.x = 0.06;
+        globe.position.set(1.05, 0.1, 0);
+        camera.position.set(-0.55, 0, 4.9);
+        camera.lookAt(1.05, 0.08, 0);
+        const dash = -time * 0.55;
+        for (let i = 0; i < flowMats.length; i++) {
+          flowMats[i].dashOffset = dash * (i % 2 === 0 ? 1 : -1) + i * 0.04;
+        }
+        for (let i = 0; i < flowMats.length; i++) flowMats[i].resolution.set(1920, 1080);
+        renderer.render(scene, camera);
+      }
+
+      window.__renderGlobeAt = renderAt;
+      window.addEventListener("hf-seek", (event) => {
+        renderAt(event.detail.time);
+      });
+
+      function boot() {
+        setup(img);
+        renderAt(window.__hfThreeTime || 0);
+      }
+      if (img.complete && img.naturalWidth) boot();
+      else img.addEventListener("load", boot, { once: true });
+    </script>
+  </body>
+</html>
