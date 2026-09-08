@@ -1,0 +1,8 @@
+.DS_Store
+.env
+.hyperframes/
+.media/
+.thumbnails/
+snapshots/
+renders/
+node_modules/

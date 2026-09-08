@@ -1,0 +1,52 @@
+{
+  "starts": [
+    0.9,
+    3.423,
+    6.745,
+    12.969,
+    14.965,
+    17.557,
+    20.952
+  ],
+  "ends": [
+    3.243,
+    6.445,
+    12.689,
+    14.716,
+    17.107,
+    20.652,
+    22.016
+  ],
+  "speech_end": 22.016,
+  "total": 25.416,
+  "turns": [
+    {
+      "speaker": "Mantas",
+      "text": "Hey \u2014 this is the Tatum Podcast. I'm Mantas."
+    },
+    {
+      "speaker": "Hannah",
+      "text": "And I'm Hannah. We've spent all week digging into Robinhood Chain."
+    },
+    {
+      "speaker": "Mantas",
+      "text": "They built it for tokenized stocks and on-chain finance\u2026 with twenty-eight million customers already behind it."
+    },
+    {
+      "speaker": "Hannah",
+      "text": "Then volume just took off, overnight."
+    },
+    {
+      "speaker": "Mantas",
+      "text": "And then, of course\u2026 the meme coins showed up."
+    },
+    {
+      "speaker": "Hannah",
+      "text": "But that's only part of what's going on. We get into the whole thing on Spotify."
+    },
+    {
+      "speaker": "Mantas",
+      "text": "Link's in the comments."
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: 'Poppins'; font-weight: 500; font-style: normal; src: url('assets/fonts/poppins-500.woff2') format('woff2'); }
+      @font-face { font-family: 'Poppins'; font-weight: 700; font-style: normal; src: url('assets/fonts/poppins-700.woff2') format('woff2'); }
+      @font-face { font-family: 'Poppins'; font-weight: 800; font-style: normal; src: url('assets/fonts/poppins-800.woff2') format('woff2'); }
+      @font-face { font-family: 'Poppins'; font-weight: 900; font-style: normal; src: url('assets/fonts/poppins-900.woff2') format('woff2'); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1080px; overflow: hidden; background: #fafafa; }
+      body { font-family: 'Poppins', sans-serif; }
+
+      .fill { position: absolute; inset: 0; }
+      .center { display: flex; align-items: center; justify-content: center; }
+      .dots {
+        position: absolute; inset: 0; pointer-events: none;
+        background-image: radial-gradient(#0b0c14 2px, transparent 2.4px);
+        background-size: 26px 26px; opacity: 0.06;
+      }
+
+      /* ---------- Tatum mark built from blocks (real geometry) ---------- */
+      /* geometry scaled 1.706x from tatum-logo-color.svg icon paths */
+      .blk { position: absolute; }
+      .blk.h1 { left: 0; top: 50px; width: 205px; height: 103px; background: #4f37fd; box-shadow: 0 20px 44px -12px rgba(79, 55, 253, 0.5); }
+      .blk.h2 { left: 255px; top: 0; width: 205px; height: 103px; background: #2ccd9a; box-shadow: 0 20px 44px -12px rgba(44, 205, 154, 0.5); }
+      .blk.v1 { left: 205px; top: 152px; width: 112px; height: 205px; background: #4f37fd; box-shadow: 0 20px 44px -12px rgba(79, 55, 253, 0.5); }
+
+      /* ---------- S1 logo intro ---------- */
+      #s1 { background: #fafafa; }
+      #logo { position: absolute; left: 310px; top: 300px; width: 460px; height: 358px; }
+      .ring { position: absolute; left: 230px; top: 179px; width: 560px; height: 560px; margin: -280px 0 0 -280px; border-radius: 50%; border: 3px solid rgba(79, 55, 253, 0.4); }
+      .ring.green { border-color: rgba(44, 205, 154, 0.45); }
+      #glow { position: absolute; left: 230px; top: 179px; width: 900px; height: 900px; margin: -450px 0 0 -450px; border-radius: 50%;
+              background: radial-gradient(circle, rgba(79, 55, 253, 0.14) 0%, rgba(44, 205, 154, 0.06) 42%, transparent 68%); }
+      #s1-word { position: absolute; left: 0; right: 0; top: 742px; text-align: center; color: #181d27; font-weight: 500; font-size: 58px; letter-spacing: 0.06em; }
+      #s1-word .accent { color: #4f37fd; }
+
+      /* ---------- S2 title ---------- */
+      #s2 { background: #4f37fd; }
+      .halftone {
+        position: absolute; inset: 0; pointer-events: none;
+        background-image: radial-gradient(#0b0c14 2.4px, transparent 2.8px);
+        background-size: 26px 26px; opacity: 0.14;
+        -webkit-mask-image: radial-gradient(circle at 88% 12%, #000 0%, transparent 55%);
+        mask-image: radial-gradient(circle at 88% 12%, #000 0%, transparent 55%);
+      }
+      #s2-stack {
+        position: relative; width: 100%; height: 100%; display: flex; flex-direction: column;
+        align-items: flex-start; justify-content: flex-start; gap: 10px; padding: 132px 0 0 84px;
+      }
+      #s2-eyebrow {
+        display: inline-block; font-weight: 700; font-size: 27px; letter-spacing: 0.12em; text-transform: uppercase;
+        color: #181d27; background: #2ccd9a; padding: 12px 26px; border: 2px solid #e9eaeb; border-radius: 4px; margin-bottom: 30px;
+        box-shadow: 0 14px 30px -10px rgba(44, 205, 154, 0.55); transform-origin: left center;
+      }
+      .title-line { font-weight: 700; font-size: 128px; line-height: 1.06; letter-spacing: -0.02em; color: #ffffff; text-shadow: 0 10px 34px rgba(11, 12, 20, 0.35); }
+      #t-qwrap { position: absolute; right: 84px; bottom: 48px; width: 380px; height: 400px; }
+      #t-burst { position: absolute; left: 50%; top: 50%; margin: -300px 0 0 -300px; width: 600px; height: 600px; }
+      #t-qmark {
+        position: absolute; right: 40px; bottom: 0; font-weight: 700; font-size: 380px; line-height: 1;
+        color: #2ccd9a; transform-origin: center; text-shadow: 0 18px 50px rgba(11, 12, 20, 0.4);
+      }
+
+      /* ---------- S3 collage ---------- */
+      #s3-paper { background: #fafafa; }
+      .panel {
+        position: absolute; background: #ffffff; border: 2px solid #e9eaeb; border-radius: 28px;
+        box-shadow: 0 24px 56px -16px rgba(10, 13, 18, 0.18), 0 4px 12px -4px rgba(10, 13, 18, 0.06);
+        overflow: hidden;
+      }
+      .panel.dark { background: #181d27; border-color: rgba(255, 255, 255, 0.1); }
+      .panel .pad { padding: 48px 52px; }
+      .kicker { font-weight: 500; font-size: 28px; letter-spacing: 0.1em; text-transform: uppercase; color: #4f37fd; }
+      .big { font-weight: 700; color: #181d27; line-height: 1.12; letter-spacing: -0.02em; margin-top: 16px; }
+      .tag {
+        display: inline-block; padding: 12px 20px; border: 2px solid #e9eaeb; border-radius: 4px;
+        background: #ffffff; color: #717680; font-size: 26px; font-weight: 500; letter-spacing: 0.08em;
+        text-transform: uppercase; box-shadow: 0 2px 4px 0 rgba(10, 13, 18, 0.05);
+      }
+      .sticker {
+        position: absolute; font-weight: 700; letter-spacing: -0.01em; color: #ffffff; background: #4f37fd;
+        border-radius: 6px; box-shadow: 0 16px 32px -12px rgba(79, 55, 253, 0.5), 0 4px 10px -4px rgba(10, 13, 18, 0.12);
+        padding: 20px 32px;
+      }
+      .token-tile {
+        position: absolute; border: 2px solid #e9eaeb; border-radius: 24px; overflow: hidden; background: #fff;
+        box-shadow: 0 20px 44px -14px rgba(10, 13, 18, 0.22), 0 4px 10px -4px rgba(10, 13, 18, 0.08);
+      }
+      .token-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      #wojak {
+        position: absolute; left: 590px; top: 580px; width: 580px; height: 580px; transform-origin: center;
+        filter: drop-shadow(0 26px 44px rgba(10, 13, 18, 0.4));
+      }
+      #wojak img { width: 100%; height: 100%; display: block; }
+
+      /* ---------- S4 outro ---------- */
+      #s4 { background: #fafafa; }
+      #s4-logo-wrap { position: relative; width: 460px; height: 358px; }
+      #s4-mark { position: absolute; inset: 0; }
+      #s4-spotify { position: absolute; left: 50%; top: 50%; width: 360px; height: 360px; margin: -180px 0 0 -180px; }
+      #s4-spotify img { width: 100%; height: 100%; filter: drop-shadow(0 22px 44px rgba(30, 215, 96, 0.35)); }
+      #s4-word { color: #181d27; font-weight: 500; font-size: 52px; letter-spacing: 0.06em; margin-top: 46px; }
+      #s4-cta { color: #535862; font-weight: 500; font-size: 38px; margin-top: 24px; }
+      #s4-cta b { color: #181d27; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="25.45" data-width="1080" data-height="1080">
+      <audio id="vo" src="audio/teaser-final.mp3" data-start="0"></audio>
+
+      <!-- S1: logo assembly on paper -->
+      <div id="s1" class="clip fill" data-start="0" data-duration="3.75" data-track-index="1">
+        <div class="dots"></div>
+        <div id="logo">
+          <div id="glow"></div>
+          <div class="ring" id="ring1"></div>
+          <div class="ring green" id="ring2"></div>
+          <div class="ring" id="ring3"></div>
+          <div class="blk h1" id="blk-a"></div>
+          <div class="blk h2" id="blk-b"></div>
+          <div class="blk v1" id="blk-c"></div>
+        </div>
+        <div id="s1-word">Tatum <span class="accent">Podcast</span></div>
+      </div>
+
+      <!-- S2: the question -->
+      <div id="s2" class="clip fill" data-start="3.45" data-duration="3.7" data-track-index="2">
+        <div class="halftone"></div>
+        <div id="s2-stack">
+          <div id="s2-eyebrow">Today on the Tatum Podcast</div>
+          <div class="title-line" id="t-whats">What&rsquo;s really</div>
+          <div class="title-line" id="t-happening">happening on</div>
+          <div class="title-line" id="t-robinhood">Robinhood</div>
+        </div>
+        <div id="t-qwrap" data-layout-allow-overlap>
+          <svg id="t-burst" viewBox="0 0 600 600">
+            <g stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.9">
+              <line x1="300" y1="42" x2="300" y2="112" />
+              <line x1="300" y1="488" x2="300" y2="558" />
+              <line x1="42" y1="300" x2="112" y2="300" />
+              <line x1="488" y1="300" x2="558" y2="300" />
+              <line x1="118" y1="118" x2="166" y2="166" stroke="#2ccd9a" />
+              <line x1="434" y1="434" x2="482" y2="482" stroke="#2ccd9a" />
+              <line x1="118" y1="482" x2="166" y2="434" />
+              <line x1="434" y1="166" x2="482" y2="118" />
+            </g>
+          </svg>
+          <div id="t-qmark">?</div>
+        </div>
+      </div>
+
+      <!-- S3: collage -->
+      <div id="s3-paper" class="clip fill" data-start="6.95" data-duration="12.6" data-track-index="3">
+        <div class="dots"></div>
+      </div>
+
+      <!-- Beat A: tokenized stocks / onchain finance -->
+      <div id="pA1" class="clip panel" data-start="7.0" data-duration="3.25" data-track-index="4" style="left: 70px; top: 120px; width: 660px; height: 500px;">
+        <div class="pad">
+          <div class="kicker" data-layout-allow-overlap>Built for</div>
+          <div class="big" data-layout-allow-overlap style="font-size: 92px;">Tokenized<br />stocks</div>
+          <div style="margin-top: 36px; display: flex; gap: 16px; flex-wrap: wrap;">
+            <span class="tag">AAPL</span><span class="tag">NVDA</span><span class="tag">GOOGL</span>
+          </div>
+        </div>
+      </div>
+      <div id="pA2" class="clip panel dark" data-start="7.45" data-duration="2.8" data-track-index="5" style="left: 480px; top: 560px; width: 540px; height: 380px;">
+        <div class="pad">
+          <div class="kicker" data-layout-allow-overlap style="color: #2ccd9a;">And</div>
+          <div class="big" data-layout-allow-overlap style="font-size: 74px; color: #ffffff;">On-chain<br />finance</div>
+        </div>
+      </div>
+
+      <!-- Beat B: 28M customers -->
+      <div id="pB1" class="clip panel" data-start="10.05" data-duration="3.05" data-track-index="4" style="left: 90px; top: 210px; width: 900px; height: 560px;">
+        <div class="pad" style="padding-top: 52px;">
+          <div class="kicker" data-layout-allow-overlap>Distribution, day one</div>
+          <div class="big" id="pB1-num" data-layout-allow-overlap style="font-size: 215px; color: #4f37fd;">28M</div>
+          <div class="big" data-layout-allow-overlap style="font-size: 56px; margin-top: 4px;">customers behind it</div>
+        </div>
+      </div>
+      <div id="pB2" class="clip sticker" data-start="10.85" data-duration="2.25" data-track-index="5" style="left: 620px; top: 160px; font-size: 40px; transform-origin: center;">Already onboard</div>
+
+      <!-- Beat C: volume took off -->
+      <div id="pC1" class="clip panel dark" data-start="13.0" data-duration="2.05" data-track-index="4" style="left: 80px; top: 170px; width: 920px; height: 600px;">
+        <div class="pad" style="padding-top: 56px;">
+          <div class="kicker" style="color: #2ccd9a;">Then, overnight</div>
+          <div class="big" style="font-size: 110px; color: #ffffff;">Volume<br />took off</div>
+          <svg width="780" height="160" viewBox="0 0 780 180" preserveAspectRatio="none" style="margin-top: 0;">
+            <polyline id="pC1-line" points="10,168 130,150 250,158 370,110 490,120 610,52 770,14" fill="none" stroke="#2ccd9a" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+      <div id="pC2" class="clip sticker" data-start="13.55" data-duration="1.5" data-track-index="5" style="left: 560px; top: 120px; font-size: 44px; background: #2ccd9a; color: #181d27; box-shadow: 0 16px 32px -12px rgba(44, 205, 154, 0.5), 0 4px 10px -4px rgba(10, 13, 18, 0.12);">$3.1B week one</div>
+
+      <!-- Beat D: memecoin burst -->
+      <div id="pD-grid" class="clip fill" data-start="14.9" data-duration="2.5" data-track-index="4">
+        <div class="token-tile tk" style="left: 60px;  top: 60px;  width: 300px; height: 300px;"><img src="assets/tokens/cashcat.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 390px; top: 60px;  width: 300px; height: 300px;"><img src="assets/tokens/what-if.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 720px; top: 60px;  width: 300px; height: 300px;"><img src="assets/tokens/tendies.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 60px;  top: 390px; width: 300px; height: 300px;"><img src="assets/tokens/stonkbroker.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 390px; top: 390px; width: 300px; height: 300px;"><img src="assets/tokens/juggernaut.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 720px; top: 390px; width: 300px; height: 300px;"><img src="assets/tokens/dog-in-hood.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 60px;  top: 720px; width: 300px; height: 300px;"><img src="assets/tokens/the-green-bull.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 390px; top: 720px; width: 300px; height: 300px;"><img src="assets/tokens/fonz-on-pons.png" alt="" /></div>
+        <div class="token-tile tk" style="left: 720px; top: 720px; width: 300px; height: 300px;"><img src="assets/tokens/frong.png" alt="" /></div>
+        <div id="pD-banner" class="sticker" style="left: 120px; top: 470px; width: 840px; text-align: center; font-size: 56px; background: #ffffff; color: #181d27; border: 5px solid #0b0c14; transform-origin: center; box-shadow: 0 20px 44px -12px rgba(10, 13, 18, 0.35), 0 4px 10px -4px rgba(10, 13, 18, 0.14);">Memecoins showed up</div>
+      </div>
+
+      <!-- Beat E: only part of the story + wojak -->
+      <div id="pE1" class="clip panel" data-start="17.45" data-duration="2.15" data-track-index="4" style="left: 90px; top: 300px; width: 900px; height: 480px; background: #4f37fd; border-color: rgba(255, 255, 255, 0.14);">
+        <div class="pad" style="padding-top: 96px;">
+          <div class="big" style="font-size: 80px; color: #ffffff;">That&rsquo;s only part<br />of the story&hellip;</div>
+        </div>
+      </div>
+      <div id="wojak" class="clip" data-start="17.9" data-duration="1.7" data-track-index="5" data-layout-allow-overlap>
+        <img src="assets/brand/wojak-cut.png" alt="" />
+      </div>
+
+      <!-- S4: outro logo -> Spotify on paper -->
+      <div id="s4" class="clip fill center" data-start="19.3" data-duration="6.15" data-track-index="6" style="flex-direction: column;">
+        <div class="dots"></div>
+        <div id="s4-logo-wrap">
+          <div id="s4-mark">
+            <div class="blk h1"></div>
+            <div class="blk h2"></div>
+            <div class="blk v1"></div>
+          </div>
+          <div id="s4-spotify"><img src="assets/brand/spotify.svg" alt="" /></div>
+        </div>
+        <div id="s4-word">Tatum Podcast</div>
+        <div id="s4-cta">Full episode on <b>Spotify</b>, link in the comments</div>
+      </div>
+    </div>
+
+    <script>
+      const build = () => {
+        const tl = gsap.timeline({ paused: true });
+        const pop = { ease: 'back.out(1.8)', duration: 0.45 };
+
+        // ---- S1: logo assembly (0 - 3.75)
+        tl.set('#s1-word', { autoAlpha: 0 }, 0);
+        tl.set('#glow', { autoAlpha: 0 }, 0);
+        tl.set(['#ring1', '#ring2', '#ring3'], { autoAlpha: 0 }, 0);
+        tl.fromTo('#blk-a', { x: -760, y: -160, rotation: -50, autoAlpha: 0 },
+          { x: 0, y: 0, rotation: 0, autoAlpha: 1, ease: 'back.out(1.35)', duration: 0.6 }, 0.12);
+        tl.fromTo('#blk-c', { x: 180, y: 780, rotation: 40, autoAlpha: 0 },
+          { x: 0, y: 0, rotation: 0, autoAlpha: 1, ease: 'back.out(1.35)', duration: 0.6 }, 0.3);
+        tl.fromTo('#blk-b', { x: 640, y: -640, rotation: 70, autoAlpha: 0 },
+          { x: 0, y: 0, rotation: 0, autoAlpha: 1, ease: 'back.out(1.35)', duration: 0.6 }, 0.48);
+        const ripple = (sel, at) => {
+          tl.fromTo(sel, { scale: 0.28, autoAlpha: 0.8 }, { scale: 1.5, autoAlpha: 0, ease: 'power2.out', duration: 0.7 }, at);
+        };
+        ripple('#ring1', 0.66);
+        ripple('#ring2', 0.84);
+        ripple('#ring3', 1.02);
+        tl.fromTo('#glow', { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1, ease: 'power2.out', duration: 0.7 }, 1.0);
+        tl.fromTo('#logo', { scale: 1 }, { scale: 1.05, ease: 'back.out(4)', duration: 0.3 }, 1.08);
+        tl.to('#logo', { scale: 1, ease: 'power2.inOut', duration: 0.4 }, 1.4);
+        tl.fromTo('#s1-word', { y: 44, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'power3.out', duration: 0.5 }, 1.35);
+        tl.to('#logo', { scale: 1.06, ease: 'sine.inOut', duration: 1.4 }, 2.0);
+        tl.to('#s1', { autoAlpha: 0, scale: 1.14, ease: 'power2.in', duration: 0.32 }, 3.35);
+
+        // ---- S2: the question (3.45 - 7.15)
+        tl.fromTo('#s2', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.18 }, 3.45);
+        tl.fromTo('#s2-eyebrow', { scale: 0.3, autoAlpha: 0, rotation: -6 },
+          { scale: 1, autoAlpha: 1, rotation: -2, ease: 'back.out(2)', duration: 0.4 }, 3.55);
+        const slam = (sel, at, rot) => {
+          tl.fromTo(sel, { scale: 2.1, autoAlpha: 0, rotation: rot },
+            { scale: 1, autoAlpha: 1, rotation: 0, ease: 'power4.in', duration: 0.26 }, at);
+          tl.fromTo('#s2-stack', { x: 0 }, { x: 9, yoyo: true, repeat: 1, duration: 0.05 }, at + 0.24);
+        };
+        slam('#t-whats', 3.75, -4);
+        slam('#t-happening', 4.1, 3);
+        slam('#t-robinhood', 4.45, -3);
+        tl.fromTo('#t-qmark', { scale: 0.2, autoAlpha: 0, rotation: -24 },
+          { scale: 1, autoAlpha: 1, rotation: 8, ease: 'back.out(2.4)', duration: 0.5 }, 4.85);
+        tl.fromTo('#t-burst', { scale: 0.2, autoAlpha: 0, rotation: -30 },
+          { scale: 1, autoAlpha: 1, rotation: 0, ease: 'power3.out', duration: 0.45 }, 4.9);
+        tl.to('#t-burst', { scale: 1.25, autoAlpha: 0, ease: 'power2.out', duration: 0.5 }, 5.35);
+        tl.to('#t-qmark', { scale: 1.16, rotation: -6, ease: 'back.out(3)', duration: 0.28 }, 6.05);
+        tl.fromTo('#t-burst', { scale: 0.4, autoAlpha: 0.9, rotation: 20 },
+          { scale: 1.3, autoAlpha: 0, ease: 'power2.out', duration: 0.5 }, 6.08);
+        tl.to('#t-qmark', { scale: 1.0, rotation: 8, ease: 'power2.inOut', duration: 0.3 }, 6.4);
+        tl.to('#s2', { autoAlpha: 0, y: -80, ease: 'power2.in', duration: 0.26 }, 6.88);
+
+        // ---- S3 paper
+        tl.fromTo('#s3-paper', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 6.95);
+
+        const popPanel = (sel, at, rot = -2) => {
+          tl.fromTo(sel, { scale: 0.55, autoAlpha: 0, rotation: rot * 3 }, { scale: 1, autoAlpha: 1, rotation: rot, ...pop }, at);
+        };
+        const exitPanel = (sel, at) => {
+          tl.to(sel, { scale: 0.85, autoAlpha: 0, y: -36, ease: 'power2.in', duration: 0.22 }, at);
+        };
+
+        // Beat A: tokenized stocks / on-chain finance (7.0 - 10.25)
+        popPanel('#pA1', 7.1, -2);
+        popPanel('#pA2', 7.55, 2);
+        exitPanel('#pA1', 9.95); exitPanel('#pA2', 9.95);
+
+        // Beat B: 28M customers (10.05 - 13.1)
+        popPanel('#pB1', 10.15, -1.5);
+        popPanel('#pB2', 10.95, 5);
+        tl.fromTo('#pB1-num', { scale: 0.6 }, { scale: 1, ease: 'elastic.out(1, 0.5)', duration: 0.9 }, 10.45);
+        exitPanel('#pB1', 12.82); exitPanel('#pB2', 12.82);
+
+        // Beat C: volume took off (13.0 - 15.05)
+        popPanel('#pC1', 13.1, 1.5);
+        popPanel('#pC2', 13.65, -5);
+        tl.fromTo('#pC1-line', { strokeDasharray: 1200, strokeDashoffset: 1200 }, { strokeDashoffset: 0, ease: 'power2.out', duration: 0.8 }, 13.35);
+        exitPanel('#pC1', 14.8); exitPanel('#pC2', 14.8);
+
+        // Beat D: memecoin burst (14.9 - 17.4), banner lands on "meme coins" (16.4)
+        const tkRots = [-3, 2, -1, 3, -2, 1, 2, -3, 1];
+        document.querySelectorAll('.tk').forEach((el, i) => {
+          tl.fromTo(el, { scale: 0.3, autoAlpha: 0, rotation: 10 },
+            { scale: 1, autoAlpha: 1, rotation: tkRots[i], ease: 'back.out(2)', duration: 0.3 }, 15.0 + i * 0.06);
+        });
+        tl.fromTo('#pD-banner', { scale: 0.4, autoAlpha: 0, rotation: -4 }, { scale: 1, autoAlpha: 1, rotation: -2, ease: 'back.out(1.8)', duration: 0.35 }, 16.35);
+        tl.to('#pD-grid', { scale: 1.06, autoAlpha: 0, ease: 'power2.in', duration: 0.24 }, 17.15);
+
+        // Beat E: only part of the story + wojak (17.45 - 19.6)
+        popPanel('#pE1', 17.55, -1.5);
+        // wojak drops in from above like a slapped-on sticker
+        tl.fromTo('#wojak', { y: -560, rotation: -24, scale: 1.25, autoAlpha: 0 },
+          { y: 0, rotation: 7, scale: 1, autoAlpha: 1, ease: 'back.out(1.3)', duration: 0.45 }, 17.95);
+        tl.to('#wojak', { rotation: 4, ease: 'sine.inOut', duration: 0.3 }, 18.45);
+        exitPanel('#pE1', 19.32);
+        tl.to('#wojak', { scale: 0.85, autoAlpha: 0, y: -40, ease: 'power2.in', duration: 0.22 }, 19.32);
+
+        // ---- S4: outro (19.3 - 25.45)
+        tl.fromTo('#s4', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.25 }, 19.35);
+        tl.fromTo('#s4-mark', { scale: 0.5, autoAlpha: 0, rotation: -10 }, { scale: 1, autoAlpha: 1, rotation: 0, ease: 'back.out(1.6)', duration: 0.55 }, 19.5);
+        tl.fromTo('#s4-word', { y: 36, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'power3.out', duration: 0.4 }, 19.9);
+        // Spotify replaces the mark on "Spotify" (20.6 - 21.1)
+        tl.set('#s4-spotify', { autoAlpha: 0 }, 0);
+        tl.to('#s4-mark', { scale: 0.4, autoAlpha: 0, rotation: 10, ease: 'power2.in', duration: 0.3 }, 20.55);
+        tl.fromTo('#s4-spotify', { scale: 0.4, autoAlpha: 0, rotation: -12 }, { scale: 1, autoAlpha: 1, rotation: 0, ease: 'back.out(1.7)', duration: 0.5 }, 20.8);
+        tl.fromTo('#s4-cta', { y: 30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ease: 'power3.out', duration: 0.45 }, 21.35);
+        tl.to('#s4-spotify', { scale: 1.05, yoyo: true, repeat: 3, ease: 'sine.inOut', duration: 0.55 }, 22.3);
+        tl.to('#s4', { autoAlpha: 0, ease: 'power2.in', duration: 0.5 }, 24.85);
+
+        window.__timelines['main'] = tl;
+      };
+      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(build); } else { build(); }
+    </script>
+  </body>
+</html>
