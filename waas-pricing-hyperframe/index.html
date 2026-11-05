@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      html, body {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background: #f5f5f5;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      #root {
+        position: relative;
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+      }
+
+      .video-layer { position: absolute; inset: 0; }
+      .video-layer video {
+        width: 1280px;
+        height: 720px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .corner-logo {
+        position: absolute;
+        top: 28px;
+        left: 32px;
+        z-index: 20;
+        width: 130px;
+        height: auto;
+      }
+
+      .corner-logo img { width: 100%; height: auto; display: block; }
+
+      /* ---------- lower third ---------- */
+      .lower-third {
+        position: absolute;
+        left: 48px;
+        bottom: 56px;
+        z-index: 15;
+        display: flex;
+        align-items: stretch;
+        opacity: 0;
+        visibility: hidden;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.35);
+      }
+
+      .lt-body {
+        padding: 16px 24px 16px 20px;
+        background: rgba(8, 10, 13, 0.82);
+        backdrop-filter: blur(12px);
+      }
+
+      .lt-name { font-size: 28px; font-weight: 600; color: #ffffff; white-space: nowrap; }
+
+      .lt-role {
+        margin-top: 3px;
+        font-family: 'Geist Mono', monospace;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #a19afe;
+      }
+
+      .lt-logo {
+        display: flex;
+        align-items: center;
+        padding: 0 22px 0 4px;
+        background: rgba(8, 10, 13, 0.82);
+        backdrop-filter: blur(12px);
+      }
+
+      .lt-logo img { width: 110px; height: auto; display: block; }
+
+      /* ---------- intro text ---------- */
+      .intro-text {
+        position: absolute;
+        left: 56px;
+        top: 100px;
+        z-index: 12;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .intro-eyebrow {
+        font-family: 'Geist Mono', monospace;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+
+      .intro-accent {
+        margin-top: 8px;
+        font-size: 44px;
+        font-weight: 700;
+        line-height: 1.06;
+        letter-spacing: -0.02em;
+        color: #000000;
+      }
+
+      .intro-product {
+        margin-top: 4px;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 1.15;
+        color: #ffffff;
+      }
+
+      /* ---------- pricing panel ---------- */
+      .pricing-overlay {
+        position: absolute;
+        right: 64px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .price-card {
+        width: 392px;
+        padding: 26px 28px 28px;
+        border-radius: 16px;
+        background: rgba(16, 17, 46, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+        opacity: 0;
+      }
+
+      .pc-eyebrow {
+        font-family: 'Geist Mono', monospace;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #a19afe;
+      }
+
+      .pc-titles {
+        position: relative;
+        margin-top: 6px;
+        height: 32px;
+      }
+
+      .pc-title {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 26px;
+        font-weight: 600;
+        line-height: 1.2;
+        color: #ffffff;
+      }
+
+      .pc-title-scale { opacity: 0; }
+
+      .pc-scenes { position: relative; margin-top: 20px; min-height: 344px; }
+
+      .pc-scene-apis { position: relative; }
+      .pc-scene-scale { position: absolute; inset: 0 0 auto; opacity: 0; visibility: hidden; }
+
+      /* --- scene A: built-in APIs --- */
+      .feature-list { display: flex; flex-direction: column; gap: 10px; }
+
+      .feature-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(79, 55, 253, 0.35);
+        color: #d5d3fe;
+      }
+
+      .feature-icon svg { width: 22px; height: 22px; }
+
+      .feature-name { font-size: 16px; font-weight: 600; color: #ffffff; }
+      .feature-desc { margin-top: 1px; font-size: 12.5px; font-weight: 400; color: #9595a1; }
+
+      /* --- scene B: costs at scale --- */
+      .scale-counter-label {
+        font-family: 'Geist Mono', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #9595a1;
+      }
+
+      .scale-counter {
+        margin-top: 2px;
+        font-size: 46px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: #ffffff;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .scale-counter .unit {
+        font-size: 18px;
+        font-weight: 500;
+        color: #9595a1;
+        letter-spacing: 0;
+        margin-left: 6px;
+      }
+
+      .price-grid {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .price-stat {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .price-stat-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #9595a1;
+      }
+
+      .price-stack {
+        position: relative;
+        margin-top: 3px;
+        height: 34px;
+        overflow: hidden;
+      }
+
+      .price-stack span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 34px;
+        color: #ffffff;
+        font-variant-numeric: tabular-nums;
+        opacity: 0;
+      }
+
+      .price-stack span:first-child { opacity: 1; }
+
+      .bar-chart {
+        margin-top: 16px;
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        height: 104px;
+      }
+
+      .bar-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 7px;
+        height: 100%;
+      }
+
+      .bar {
+        width: 100%;
+        border-radius: 7px 7px 3px 3px;
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .bar-1 { height: 80px; }
+      .bar-2 { height: 56px; }
+      .bar-3 { height: 38px; }
+      .bar-4 { height: 18px; }
+
+      .bar-label {
+        font-family: 'Geist Mono', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: #9595a1;
+      }
+
+      .savings-badge {
+        margin-top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(44, 205, 154, 0.16);
+        border: 1px solid rgba(44, 205, 154, 0.4);
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #6fd6af;
+        opacity: 0;
+      }
+
+      .savings-badge svg { width: 16px; height: 16px; }
+
+      /* ---------- end card ---------- */
+      .scene-end {
+        position: absolute; inset: 0; z-index: 30;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background: #080a0d; opacity: 0; visibility: hidden;
+      }
+
+      .end-grid {
+        position: absolute; inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size: 96px 96px;
+        mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0, 0, 0, 1) 0%, transparent 100%);
+      }
+
+      .end-logo { position: relative; width: 320px; height: auto; opacity: 0; }
+
+      .end-cta {
+        position: relative; margin-top: 36px; max-width: 760px;
+        font-size: 34px; font-weight: 600; line-height: 1.25;
+        color: #ffffff; text-align: center; opacity: 0;
+      }
+
+      .end-cta .accent {
+        background: linear-gradient(100deg, #ffffff 10%, #a19afe 55%, #4f37fd 95%);
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent; color: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="18"
+      data-width="1280"
+      data-height="720"
+    >
+      <div class="video-layer">
+        <video
+          id="avatar-video"
+          class="clip"
+          data-start="0"
+          data-duration="15.04"
+          data-track-index="0"
+          src="assets/avatar.mp4"
+          muted
+          playsinline
+        ></video>
+      </div>
+      <audio
+        id="avatar-audio"
+        class="clip"
+        data-start="0"
+        data-duration="15.07"
+        data-track-index="1"
+        src="assets/avatar.mp4"
+      ></audio>
+
+      <div class="corner-logo">
+        <img src="assets/tatum-logo-light.svg" alt="Tatum" />
+      </div>
+
+      <div class="lower-third">
+        <div class="lt-body">
+          <p class="lt-name">Mantas Ciuksys</p>
+          <p class="lt-role">VP Marketing</p>
+        </div>
+        <div class="lt-logo">
+          <img src="assets/tatum-logo-white.svg" alt="Tatum" />
+        </div>
+      </div>
+
+      <div class="intro-text">
+        <p class="intro-eyebrow">Tatum Smart Wallets</p>
+        <p class="intro-accent">Embedded wallets</p>
+        <p class="intro-product">that don&rsquo;t punish scale</p>
+      </div>
+
+      <div class="pricing-overlay">
+        <div class="price-card">
+          <p class="pc-eyebrow">Smart Wallets</p>
+          <div class="pc-titles">
+            <h2 class="pc-title pc-title-apis">Everything built in</h2>
+            <h2 class="pc-title pc-title-scale">Predictable pricing</h2>
+          </div>
+
+          <div class="pc-scenes">
+            <div class="pc-scene-apis">
+              <div class="feature-list">
+                <div class="feature-row feature-row-create">
+                  <span class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M19 7V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1" stroke-linecap="round" />
+                      <path d="M5 7h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7z" stroke-linejoin="round" />
+                      <path d="M9 11h6" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p class="feature-name">Wallet creation</p>
+                    <p class="feature-desc">Live in minutes, any chain</p>
+                  </div>
+                </div>
+                <div class="feature-row feature-row-balance">
+                  <span class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M4 18V8m5.5 10V6M15 18v-7m5 7V4" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p class="feature-name">Balance API</p>
+                    <p class="feature-desc">Real-time portfolio balances</p>
+                  </div>
+                </div>
+                <div class="feature-row feature-row-price">
+                  <span class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M3 17l6-6 4 4 8-8" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M15 7h6v6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p class="feature-name">Price API</p>
+                    <p class="feature-desc">Live market prices</p>
+                  </div>
+                </div>
+                <div class="feature-row feature-row-notify">
+                  <span class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M13.7 21a2 2 0 0 1-3.4 0" stroke-linecap="round" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p class="feature-name">Notifications</p>
+                    <p class="feature-desc">Wallet &amp; transaction events</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pc-scene-scale">
+              <p class="scale-counter-label">Your users</p>
+              <p class="scale-counter"><span id="wallet-count">30,000</span><span class="unit">wallets</span></p>
+
+              <div class="price-grid">
+                <div class="price-stat">
+                  <p class="price-stat-label">Per wallet / mo</p>
+                  <div class="price-stack" id="price-wallet">
+                    <span>$0.013</span>
+                    <span>$0.009</span>
+                    <span>$0.006</span>
+                    <span>$0.0028</span>
+                  </div>
+                </div>
+                <div class="price-stat">
+                  <p class="price-stat-label">Per transaction</p>
+                  <div class="price-stack" id="price-tx">
+                    <span>$0.10</span>
+                    <span>$0.08</span>
+                    <span>$0.06</span>
+                    <span>$0.0085</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bar-chart">
+                <div class="bar-col"><div class="bar bar-1"></div><span class="bar-label">30K</span></div>
+                <div class="bar-col"><div class="bar bar-2"></div><span class="bar-label">50K</span></div>
+                <div class="bar-col"><div class="bar bar-3"></div><span class="bar-label">100K</span></div>
+                <div class="bar-col"><div class="bar bar-4"></div><span class="bar-label">1M</span></div>
+              </div>
+
+              <span class="savings-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 7l6 6 4-4 8 8" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M21 11v6h-6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                &minus;78% per wallet at 1M users
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-end">
+        <div class="end-grid" aria-hidden="true"></div>
+        <img class="end-logo" src="assets/tatum-logo-white.svg" alt="Tatum" />
+        <p class="end-cta">Book your free <span class="accent">solution engineering</span> session.</p>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      const lowerThird = document.querySelector('.lower-third');
+      const introText = document.querySelector('.intro-text');
+      const cornerLogo = document.querySelector('.corner-logo');
+      const videoLayer = document.querySelector('.video-layer');
+      const sceneEnd = document.querySelector('.scene-end');
+      const pricingOverlay = document.querySelector('.pricing-overlay');
+      const priceCard = document.querySelector('.price-card');
+      const sceneApis = document.querySelector('.pc-scene-apis');
+      const sceneScale = document.querySelector('.pc-scene-scale');
+      const titleApis = document.querySelector('.pc-title-apis');
+      const titleScale = document.querySelector('.pc-title-scale');
+      const walletCountEl = document.getElementById('wallet-count');
+      const walletPrices = document.querySelectorAll('#price-wallet span');
+      const txPrices = document.querySelectorAll('#price-tx span');
+      const bars = document.querySelectorAll('.bar');
+      const barLabels = document.querySelectorAll('.bar-label');
+
+      gsap.set(lowerThird, { opacity: 0, visibility: 'hidden', x: -36 });
+      gsap.set('.lt-name, .lt-role', { opacity: 0, x: -14 });
+      gsap.set('.lt-logo img', { opacity: 0, x: -10 });
+      gsap.set(introText, { opacity: 0, visibility: 'hidden' });
+      gsap.set('.intro-eyebrow, .intro-accent, .intro-product', { opacity: 0, y: 20 });
+      gsap.set(pricingOverlay, { opacity: 0, visibility: 'hidden', scale: 0.95 });
+      gsap.set(priceCard, { opacity: 0, y: 18 });
+      gsap.set('.feature-row', { opacity: 0, x: 22 });
+      gsap.set(sceneScale, { opacity: 0, visibility: 'hidden', y: 16 });
+      gsap.set(sceneEnd, { opacity: 0, visibility: 'hidden' });
+      gsap.set('.end-logo', { opacity: 0, scale: 0.92 });
+      gsap.set('.end-cta', { opacity: 0, y: 16 });
+
+      /* ---- lower third: 0.65s in, out after first sentence ---- */
+      tl.set(lowerThird, { visibility: 'visible' }, 0.65);
+      tl.to(lowerThird, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 0.65);
+      tl.to('.lt-name', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 0.86);
+      tl.to('.lt-role', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 0.98);
+      tl.to('.lt-logo img', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 1.1);
+      tl.to(lowerThird, { opacity: 0, x: -28, duration: 0.38, ease: 'power2.in' }, 5.3);
+      tl.set(lowerThird, { visibility: 'hidden' }, 5.68);
+
+      /* ---- intro text over "don't punish you as you scale" (0–4.0s) ---- */
+      tl.set(introText, { visibility: 'visible', opacity: 1 }, 0.45);
+      tl.to('.intro-eyebrow', { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.48);
+      tl.to('.intro-accent', { opacity: 1, y: 0, duration: 0.24, ease: 'power3.out' }, 1.34);
+      tl.to('.intro-product', { opacity: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 2.9);
+      tl.to(introText, { opacity: 0, y: -10, duration: 0.32, ease: 'power2.in' }, 4.05);
+      tl.set(introText, { visibility: 'hidden' }, 4.37);
+
+      /* ---- panel in on "Create wallets in minutes" (4.54s) ---- */
+      tl.set(pricingOverlay, { visibility: 'visible' }, 4.35);
+      tl.to(pricingOverlay, { opacity: 1, scale: 1, duration: 0.42, ease: 'power3.out' }, 4.35);
+      tl.to(priceCard, { opacity: 1, y: 0, duration: 0.45, ease: 'back.out(1.2)' }, 4.4);
+
+      /* feature rows land on their words: minutes 5.36 / balances 6.96 / prices 7.74 / notifications 8.3 */
+      tl.to('.feature-row-create', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 5.2);
+      tl.to('.feature-row-balance', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 6.85);
+      tl.to('.feature-row-price', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 7.62);
+      tl.to('.feature-row-notify', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 8.2);
+
+      /* ---- swap to pricing scene on "Predictable costs" (9.78s) ---- */
+      tl.to(sceneApis, { opacity: 0, y: -14, duration: 0.3, ease: 'power2.in' }, 9.45);
+      tl.set(sceneApis, { visibility: 'hidden' }, 9.75);
+      tl.to(titleApis, { opacity: 0, y: -8, duration: 0.22, ease: 'power2.in' }, 9.45);
+      tl.fromTo(titleScale, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.26, ease: 'power2.out' }, 9.72);
+      tl.set(sceneScale, { visibility: 'visible' }, 9.72);
+      tl.to(sceneScale, { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }, 9.75);
+
+      /* wallet counter + tier steps: 30K -> 50K -> 100K -> 1M ("millionth" at 12.16s) */
+      const counter = { v: 30000 };
+      const renderCount = () => {
+        walletCountEl.textContent = Math.round(counter.v).toLocaleString('en-US');
+      };
+      const stepTimes = [10.55, 11.35, 12.05];
+      const stepValues = [50000, 100000, 1000000];
+
+      stepValues.forEach((value, i) => {
+        const t = stepTimes[i];
+        tl.to(counter, { v: value, duration: 0.55, ease: 'power2.out', onUpdate: renderCount }, t);
+
+        /* price swap: previous value out, next value in */
+        tl.to([walletPrices[i], txPrices[i]], { opacity: 0, y: -12, duration: 0.24, ease: 'power2.in', overwrite: 'auto' }, t);
+        tl.fromTo(
+          [walletPrices[i + 1], txPrices[i + 1]],
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out', overwrite: 'auto' },
+          t + 0.12
+        );
+
+        /* bar highlight moves down the curve */
+        tl.to(bars[i], { backgroundColor: 'rgba(255,255,255,0.16)', duration: 0.25, overwrite: 'auto' }, t);
+        tl.to(bars[i + 1], { backgroundColor: '#2ccd9a', duration: 0.25, overwrite: 'auto' }, t);
+        tl.to(barLabels[i], { color: '#9595a1', duration: 0.25, overwrite: 'auto' }, t);
+        tl.to(barLabels[i + 1], { color: '#6fd6af', duration: 0.25, overwrite: 'auto' }, t);
+      });
+
+      /* initial active bar */
+      tl.to(bars[0], { backgroundColor: '#2ccd9a', duration: 0.3 }, 9.85);
+      tl.to(barLabels[0], { color: '#6fd6af', duration: 0.3 }, 9.85);
+
+      /* savings badge after "millionth" lands */
+      tl.to('.savings-badge', { opacity: 1, duration: 0.32, ease: 'power2.out' }, 12.65);
+      tl.from('.savings-badge', { scale: 0.9, duration: 0.32, ease: 'back.out(1.6)' }, 12.65);
+
+      /* ---- panel out before CTA sentence ends on camera ---- */
+      tl.to(priceCard, { opacity: 0, y: 14, duration: 0.32, ease: 'power2.in' }, 13.55);
+      tl.to(pricingOverlay, { opacity: 0, scale: 0.96, duration: 0.36, ease: 'power2.in' }, 13.55);
+      tl.set(pricingOverlay, { visibility: 'hidden' }, 13.92);
+
+      /* ---- outro: end card while he finishes "session" ---- */
+      tl.to(cornerLogo, { opacity: 0, duration: 0.3, ease: 'power2.in' }, 14.45);
+      tl.to(videoLayer, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 14.45);
+      tl.set(sceneEnd, { visibility: 'visible', opacity: 1 }, 14.8);
+      tl.to('.end-logo', { opacity: 1, scale: 1, duration: 0.46, ease: 'power2.out' }, 14.95);
+      tl.to('.end-cta', { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }, 15.35);
+      tl.to({}, { duration: 2.0 }, 16.0);
+
+      window.__timelines['main'] = tl;
+    </script>
+  </body>
+</html>
