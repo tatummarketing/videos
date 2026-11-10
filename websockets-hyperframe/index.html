@@ -1,13 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
     <title>Tatum — WebSockets</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,7 +78,7 @@
         z-index: 10; opacity: 0; visibility: hidden;
       }
       .card {
-        width: 420px; padding: 26px 28px 28px;
+        width: 480px; padding: 30px 32px 32px;
         border-radius: 16px;
         background: rgba(16, 17, 46, 0.92);
         border: 1px solid rgba(255, 255, 255, 0.12);
@@ -89,86 +86,86 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
       }
       .card-eyebrow {
-        font-family: 'Geist Mono', monospace; font-size: 13px; font-weight: 500;
+        font-family: 'Geist Mono', monospace; font-size: 14px; font-weight: 500;
         letter-spacing: 0.18em; text-transform: uppercase; color: #a19afe;
       }
       .card-title {
-        margin-top: 6px; font-size: 26px; font-weight: 600;
+        margin-top: 8px; font-size: 28px; font-weight: 600;
         line-height: 1.2; color: #ffffff;
       }
       .card-scene { margin-top: 20px; }
 
       /* --- feature rows (beats 3, 6) --- */
-      .feature-list { display: flex; flex-direction: column; gap: 10px; }
+      .feature-list { display: flex; flex-direction: column; gap: 12px; }
       .feature-row {
-        display: flex; align-items: center; gap: 14px;
-        padding: 12px 14px; border-radius: 12px;
+        display: flex; align-items: center; gap: 16px;
+        padding: 14px 16px; border-radius: 12px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
         opacity: 0;
       }
       .feature-icon {
-        width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px;
+        width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px;
         display: flex; align-items: center; justify-content: center;
         background: rgba(79, 55, 253, 0.35); color: #d5d3fe;
       }
-      .feature-icon svg { width: 22px; height: 22px; }
-      .feature-name { font-size: 16px; font-weight: 600; color: #ffffff; }
-      .feature-desc { margin-top: 1px; font-size: 12.5px; font-weight: 400; color: #9595a1; }
+      .feature-icon svg { width: 24px; height: 24px; }
+      .feature-name { font-size: 17px; font-weight: 600; color: #ffffff; }
+      .feature-desc { margin-top: 2px; font-size: 13.5px; font-weight: 400; color: #9595a1; }
 
       /* --- use-case pills (beat 4) --- */
       .pill-grid {
         display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
       }
       .pill {
-        display: flex; align-items: center; gap: 12px;
-        padding: 14px 16px; border-radius: 12px;
+        display: flex; align-items: center; gap: 14px;
+        padding: 16px 18px; border-radius: 12px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
         opacity: 0;
       }
       .pill-icon {
-        width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px;
+        width: 40px; height: 40px; flex-shrink: 0; border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
         background: rgba(79, 55, 253, 0.35); color: #d5d3fe;
       }
-      .pill-icon svg { width: 20px; height: 20px; }
-      .pill-label { font-size: 15px; font-weight: 600; color: #ffffff; }
+      .pill-icon svg { width: 22px; height: 22px; }
+      .pill-label { font-size: 16px; font-weight: 600; color: #ffffff; }
 
       /* --- chain grid (beat 5) --- */
       .chain-grid {
         display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
       }
       .chain-cell {
-        display: flex; flex-direction: column; align-items: center; gap: 8px;
-        padding: 14px 8px; border-radius: 12px;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+        padding: 16px 10px; border-radius: 12px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
         opacity: 0;
       }
-      .chain-cell img { width: 44px; height: 44px; }
-      .chain-cell span { font-size: 13px; font-weight: 500; color: #ffffff; }
+      .chain-cell img { width: 48px; height: 48px; }
+      .chain-cell span { font-size: 14px; font-weight: 500; color: #ffffff; }
 
       /* --- checklist (beat 6) --- */
       .check-row {
-        display: flex; align-items: center; gap: 14px;
-        padding: 12px 14px; border-radius: 12px;
+        display: flex; align-items: center; gap: 16px;
+        padding: 14px 16px; border-radius: 12px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
         opacity: 0;
       }
       .check-icon {
-        width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%;
+        width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         background: rgba(44, 205, 154, 0.2); color: #2ccd9a;
       }
-      .check-icon svg { width: 20px; height: 20px; }
-      .check-text { font-size: 16px; font-weight: 500; color: #ffffff; }
-      .check-desc { margin-top: 1px; font-size: 12.5px; font-weight: 400; color: #9595a1; }
+      .check-icon svg { width: 22px; height: 22px; }
+      .check-text { font-size: 17px; font-weight: 500; color: #ffffff; }
+      .check-desc { margin-top: 1px; font-size: 13.5px; font-weight: 400; color: #9595a1; }
 
       /* --- connection visual (beat 2) --- */
       .ws-url {
-        font-family: 'Geist Mono', monospace; font-size: 16px;
+        font-family: 'Geist Mono', monospace; font-size: 17px;
         font-weight: 500; color: #3BC7FF;
       }
       .ws-status {
@@ -180,16 +177,16 @@
         background: #34d399;
       }
       .ws-status-label {
-        font-family: 'Geist Mono', monospace; font-size: 14px;
+        font-family: 'Geist Mono', monospace; font-size: 15px;
         font-weight: 600; letter-spacing: 0.12em; color: #34d399;
       }
       .ws-events { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
       .ws-event-pill {
-        display: inline-flex; align-items: center; gap: 8px;
-        padding: 6px 14px; border-radius: 8px;
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 8px 16px; border-radius: 8px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        font-family: 'Geist Mono', monospace; font-size: 13px;
+        font-family: 'Geist Mono', monospace; font-size: 14px;
         font-weight: 500; color: #9595a1;
         opacity: 0;
       }
@@ -197,10 +194,10 @@
 
       /* --- JSON snippet (beat 3) --- */
       .json-snippet {
-        margin-top: 14px; padding: 10px 14px; border-radius: 10px;
+        margin-top: 16px; padding: 12px 16px; border-radius: 10px;
         background: rgba(255, 255, 255, 0.04);
         border: 1px solid rgba(255, 255, 255, 0.08);
-        font-family: 'Geist Mono', monospace; font-size: 13px;
+        font-family: 'Geist Mono', monospace; font-size: 14px;
         color: #9595a1; white-space: pre; opacity: 0;
       }
 
@@ -236,181 +233,157 @@
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="48"
-      data-width="1920"
-      data-height="1080"
-    >
+    <div data-hf-id="hf-ihoy" id="root" data-composition-id="main" data-start="0" data-duration="48" data-width="1920" data-height="1080">
       <!-- Bed video -->
-      <div class="video-layer">
-        <video
-          id="avatar-video"
-          class="clip"
-          data-start="0"
-          data-duration="44.96"
-          data-track-index="0"
-          src="assets/websockets.mp4"
-          muted
-          playsinline
-          preload="auto"
-        ></video>
+      <div data-hf-id="hf-yk31" class="video-layer">
+        <video data-hf-id="hf-0n4c" id="avatar-video" class="clip" data-start="0" data-duration="44.96" data-track-index="0" src="assets/websockets.mp4" muted playsinline preload="auto"></video>
       </div>
-      <audio
-        id="avatar-audio"
-        class="clip"
-        data-start="0"
-        data-duration="44.96"
-        data-track-index="1"
-        src="assets/websockets.mp4"
-      ></audio>
+      <audio data-hf-id="hf-prjh" id="avatar-audio" class="clip" data-start="0" data-duration="44.96" data-track-index="1" src="assets/websockets.mp4"></audio>
 
       <!-- Corner logo -->
-      <div class="corner-logo">
-        <img src="assets/tatum-logo-light.svg" alt="Tatum" />
+      <div style="color: rgb(233, 226, 226)" data-hf-id="hf-0r05" class="corner-logo">
+        <img data-hf-id="hf-7ybf" src="assets/tatum-logo-white.svg" alt="Tatum">
       </div>
 
       <!-- Lower third -->
-      <div class="lower-third" id="lowerThird">
-        <div class="lt-body">
-          <p class="lt-name">Mohit Thakkar</p>
-          <p class="lt-role">Solutions Engineer</p>
+      <div data-hf-id="hf-yndj" class="lower-third" id="lowerThird">
+        <div data-hf-id="hf-e3h1" class="lt-body">
+          <p data-hf-id="hf-4gto" class="lt-name">Mohit Thakkar</p>
+          <p data-hf-id="hf-ow0h" class="lt-role">Solutions Engineer</p>
         </div>
-        <div class="lt-logo">
-          <img src="assets/tatum-logo-white.svg" alt="Tatum" width="36" height="36" />
+        <div data-hf-id="hf-fj9k" class="lt-logo">
+          <img data-hf-id="hf-b5bv" src="assets/tatum-logo-white.svg" alt="Tatum" width="36" height="36">
         </div>
       </div>
 
       <!-- Intro title -->
-      <div class="intro-text" id="intro">
-        <p class="intro-eyebrow">Tatum WebSockets</p>
-        <p class="intro-accent">Real-time blockchain</p>
-        <p class="intro-product">streaming, zero polling</p>
+      <div data-hf-id="hf-k8ee" class="intro-text" id="intro">
+        <p data-hf-id="hf-obxc" class="intro-eyebrow">Tatum WebSockets</p>
+        <p data-hf-id="hf-qek2" class="intro-accent">Real-time blockchain</p>
+        <p data-hf-id="hf-69e2" class="intro-product">streaming, zero polling</p>
       </div>
 
       <!-- Beat 2: Persistent Connection (3.8s–9.6s) -->
-      <div class="overlay-panel" id="beat2">
-        <div class="card">
-          <p class="card-eyebrow">WebSocket Subscriptions</p>
-          <h2 class="card-title">Persistent connection</h2>
-          <div class="card-scene">
-            <p class="ws-url">wss://tatum.io/ws</p>
-            <div class="ws-status">
-              <span class="ws-dot"></span>
-              <span class="ws-status-label">CONNECTED</span>
+      <div data-hf-id="hf-qdr3" class="overlay-panel" id="beat2">
+        <div data-hf-id="hf-vn2y" class="card">
+          <p data-hf-id="hf-gqfw" class="card-eyebrow">WebSocket Subscriptions</p>
+          <h2 data-hf-id="hf-lavz" class="card-title">Persistent connection</h2>
+          <div data-hf-id="hf-pt79" class="card-scene">
+            <p data-hf-id="hf-aq0a" class="ws-url">wss://{chain}-mainnet.gateway.tatum.io</p>
+            <div data-hf-id="hf-vtcd" class="ws-status">
+              <span data-hf-id="hf-vi3t" class="ws-dot"></span>
+              <span data-hf-id="hf-2kty" class="ws-status-label">CONNECTED</span>
             </div>
-            <div class="ws-events">
-              <span class="ws-event-pill ws-event-1"><span class="arrow">&rarr;</span> NEW BLOCK</span>
-              <span class="ws-event-pill ws-event-2"><span class="arrow">&rarr;</span> TX CONFIRMED</span>
-              <span class="ws-event-pill ws-event-3"><span class="arrow">&rarr;</span> LOG EVENT</span>
+            <div data-hf-id="hf-krak" class="ws-events">
+              <span data-hf-id="hf-usxu" class="ws-event-pill ws-event-1"><span data-hf-id="hf-v68i" class="arrow">→</span> NEW BLOCK</span>
+              <span data-hf-id="hf-hqnl" class="ws-event-pill ws-event-2"><span data-hf-id="hf-f1jq" class="arrow">→</span> TX CONFIRMED</span>
+              <span data-hf-id="hf-3h5d" class="ws-event-pill ws-event-3"><span data-hf-id="hf-ffur" class="arrow">→</span> LOG EVENT</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Beat 3: Subscription Types (10.0s–16.2s) -->
-      <div class="overlay-panel" id="beat3">
-        <div class="card">
-          <p class="card-eyebrow">Event Types</p>
-          <h2 class="card-title">Subscribe to everything</h2>
-          <div class="card-scene">
-            <div class="feature-list">
-              <div class="feature-row" id="row-blocks">
-                <span class="feature-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-linejoin="round" />
-                    <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke-linecap="round" stroke-linejoin="round" />
+      <div data-hf-id="hf-mfn2" class="overlay-panel" id="beat3">
+        <div data-hf-id="hf-i08u" class="card">
+          <p data-hf-id="hf-ryr8" class="card-eyebrow">Event Types</p>
+          <h2 data-hf-id="hf-1xfi" class="card-title">Subscribe to everything</h2>
+          <div data-hf-id="hf-9ikp" class="card-scene">
+            <div data-hf-id="hf-mm5z" class="feature-list">
+              <div data-hf-id="hf-ekf0" class="feature-row" id="row-blocks">
+                <span data-hf-id="hf-9fu5" class="feature-icon">
+                  <svg data-hf-id="hf-4pup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-j28n" d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke-linejoin="round" />
+                    <path data-hf-id="hf-uoit" d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="feature-name">Blocks</p>
-                  <p class="feature-desc">New block headers as they're mined</p>
+                <div data-hf-id="hf-yeow">
+                  <p data-hf-id="hf-bclz" class="feature-name">Blocks</p>
+                  <p data-hf-id="hf-cx3v" class="feature-desc">New block headers as they're mined</p>
                 </div>
               </div>
-              <div class="feature-row" id="row-tx">
-                <span class="feature-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+              <div data-hf-id="hf-ve6y" class="feature-row" id="row-tx">
+                <span data-hf-id="hf-ou1t" class="feature-icon">
+                  <svg data-hf-id="hf-10qd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-k9bi" d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="feature-name">Transactions</p>
-                  <p class="feature-desc">Pending and confirmed txs</p>
+                <div data-hf-id="hf-y7yw">
+                  <p data-hf-id="hf-v48c" class="feature-name">Transactions</p>
+                  <p data-hf-id="hf-ewfj" class="feature-desc">Pending and confirmed txs</p>
                 </div>
               </div>
-              <div class="feature-row" id="row-accounts">
-                <span class="feature-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M19 7V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1" stroke-linecap="round" />
-                    <path d="M5 7h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7z" stroke-linejoin="round" />
-                    <path d="M9 11h6" stroke-linecap="round" />
+              <div data-hf-id="hf-dh1q" class="feature-row" id="row-accounts">
+                <span data-hf-id="hf-q0yw" class="feature-icon">
+                  <svg data-hf-id="hf-27ng" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-9qjj" d="M19 7V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1" stroke-linecap="round" />
+                    <path data-hf-id="hf-i33a" d="M5 7h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7z" stroke-linejoin="round" />
+                    <path data-hf-id="hf-1n6k" d="M9 11h6" stroke-linecap="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="feature-name">Accounts</p>
-                  <p class="feature-desc">Balance and state changes</p>
+                <div data-hf-id="hf-x11t">
+                  <p data-hf-id="hf-7r01" class="feature-name">Accounts</p>
+                  <p data-hf-id="hf-7o3o" class="feature-desc">Balance and state changes</p>
                 </div>
               </div>
-              <div class="feature-row" id="row-contracts">
-                <span class="feature-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
+              <div data-hf-id="hf-hptv" class="feature-row" id="row-contracts">
+                <span data-hf-id="hf-pmnv" class="feature-icon">
+                  <svg data-hf-id="hf-1tcf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-txx2" d="M16 18l6-6-6-6M8 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="feature-name">Smart Contract Events</p>
-                  <p class="feature-desc">Logs and emitted events</p>
+                <div data-hf-id="hf-xfcu">
+                  <p data-hf-id="hf-ysqh" class="feature-name">Smart Contract Events</p>
+                  <p data-hf-id="hf-0jtm" class="feature-desc">Logs and emitted events</p>
                 </div>
               </div>
             </div>
-            <div class="json-snippet" id="jsonSnippet">{ "type": "newHeads", "chain": "ethereum" }</div>
+            <div data-hf-id="hf-iek0" class="json-snippet" id="jsonSnippet">{ "type": "newHeads", "chain": "ethereum" }</div>
           </div>
         </div>
       </div>
 
       <!-- Beat 4: Use Cases (16.7s–26.2s) -->
-      <div class="overlay-panel" id="beat4">
-        <div class="card">
-          <p class="card-eyebrow">Integration</p>
-          <h2 class="card-title">Easy integration</h2>
-          <div class="card-scene">
-            <div class="pill-grid">
-              <div class="pill" id="pill-wallets">
-                <span class="pill-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M19 7V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1" stroke-linecap="round" />
-                    <path d="M5 7h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7z" stroke-linejoin="round" />
-                    <path d="M9 11h6" stroke-linecap="round" />
+      <div data-hf-id="hf-v3ix" class="overlay-panel" id="beat4">
+        <div data-hf-id="hf-iejv" class="card">
+          <p data-hf-id="hf-cgn3" class="card-eyebrow">Integration</p>
+          <h2 data-hf-id="hf-3bj0" class="card-title">Easy integration</h2>
+          <div data-hf-id="hf-aphs" class="card-scene">
+            <div data-hf-id="hf-q4j2" class="pill-grid">
+              <div data-hf-id="hf-tasz" class="pill" id="pill-wallets">
+                <span data-hf-id="hf-nbzi" class="pill-icon">
+                  <svg data-hf-id="hf-309i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-q78f" d="M19 7V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1" stroke-linecap="round" />
+                    <path data-hf-id="hf-2r3e" d="M5 7h14v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7z" stroke-linejoin="round" />
+                    <path data-hf-id="hf-626s" d="M9 11h6" stroke-linecap="round" />
                   </svg>
                 </span>
-                <span class="pill-label">Wallets</span>
+                <span data-hf-id="hf-0g29" class="pill-label">Wallets</span>
               </div>
-              <div class="pill" id="pill-dashboards">
-                <span class="pill-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M4 18V8m5.5 10V6M15 18v-7m5 7V4" stroke-linecap="round" />
+              <div data-hf-id="hf-kqkc" class="pill" id="pill-dashboards">
+                <span data-hf-id="hf-exki" class="pill-icon">
+                  <svg data-hf-id="hf-2lyh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-ixev" d="M4 18V8m5.5 10V6M15 18v-7m5 7V4" stroke-linecap="round" />
                   </svg>
                 </span>
-                <span class="pill-label">Dashboards</span>
+                <span data-hf-id="hf-33x0" class="pill-label">Dashboards</span>
               </div>
-              <div class="pill" id="pill-defi">
-                <span class="pill-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round" />
+              <div data-hf-id="hf-tk21" class="pill" id="pill-defi">
+                <span data-hf-id="hf-fbvj" class="pill-icon">
+                  <svg data-hf-id="hf-3svk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-e58n" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <span class="pill-label">DeFi Apps</span>
+                <span data-hf-id="hf-249l" class="pill-label">DeFi Apps</span>
               </div>
-              <div class="pill" id="pill-monitoring">
-                <span class="pill-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
+              <div data-hf-id="hf-h0mp" class="pill" id="pill-monitoring">
+                <span data-hf-id="hf-fq6k" class="pill-icon">
+                  <svg data-hf-id="hf-3ekj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path data-hf-id="hf-qz4o" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle data-hf-id="hf-2731" cx="12" cy="12" r="3" />
                   </svg>
                 </span>
-                <span class="pill-label">Monitoring</span>
+                <span data-hf-id="hf-8aoj" class="pill-label">Monitoring</span>
               </div>
             </div>
           </div>
@@ -418,35 +391,35 @@
       </div>
 
       <!-- Beat 5: Supported Chains (26.5s–33.2s) -->
-      <div class="overlay-panel" id="beat5">
-        <div class="card">
-          <p class="card-eyebrow">Supported Chains</p>
-          <h2 class="card-title">Multi-chain support</h2>
-          <div class="card-scene">
-            <div class="chain-grid">
-              <div class="chain-cell" id="chain-solana">
-                <img src="assets/chains/solana.svg" alt="Solana" />
-                <span>Solana</span>
+      <div data-hf-id="hf-ubv4" class="overlay-panel" id="beat5">
+        <div data-hf-id="hf-isuw" class="card">
+          <p data-hf-id="hf-l8ab" class="card-eyebrow">Supported Chains</p>
+          <h2 data-hf-id="hf-rk2u" class="card-title">Multi-chain support</h2>
+          <div data-hf-id="hf-ab6r" class="card-scene">
+            <div data-hf-id="hf-jbwc" class="chain-grid">
+              <div data-hf-id="hf-6qoa" class="chain-cell" id="chain-solana">
+                <img data-hf-id="hf-0zi1" src="assets/chains/solana.svg" alt="Solana">
+                <span data-hf-id="hf-ekol">Solana</span>
               </div>
-              <div class="chain-cell" id="chain-ethereum">
-                <img src="assets/chains/ethereum.svg" alt="Ethereum" />
-                <span>Ethereum</span>
+              <div data-hf-id="hf-l18h" class="chain-cell" id="chain-ethereum">
+                <img data-hf-id="hf-tkb7" src="assets/chains/ethereum.svg" alt="Ethereum">
+                <span data-hf-id="hf-9s3g">Ethereum</span>
               </div>
-              <div class="chain-cell" id="chain-polygon">
-                <img src="assets/chains/polygon.svg" alt="Polygon" />
-                <span>Polygon</span>
+              <div data-hf-id="hf-bo2o" class="chain-cell" id="chain-polygon">
+                <img data-hf-id="hf-yovt" src="assets/chains/polygon.svg" alt="Polygon">
+                <span data-hf-id="hf-9m4l">Polygon</span>
               </div>
-              <div class="chain-cell" id="chain-arbitrum">
-                <img src="assets/chains/arbitrum.svg" alt="Arbitrum" />
-                <span>Arbitrum</span>
+              <div data-hf-id="hf-cmlo" class="chain-cell" id="chain-arbitrum">
+                <img data-hf-id="hf-gwx5" src="assets/chains/arbitrum.svg" alt="Arbitrum">
+                <span data-hf-id="hf-e3tn">Arbitrum</span>
               </div>
-              <div class="chain-cell" id="chain-bsc">
-                <img src="assets/chains/bnb-smart-chain.svg" alt="BSC" />
-                <span>BSC</span>
+              <div data-hf-id="hf-wxe6" class="chain-cell" id="chain-bsc">
+                <img data-hf-id="hf-oyw3" src="assets/chains/bnb-smart-chain.svg" alt="BSC">
+                <span data-hf-id="hf-p39j">BSC</span>
               </div>
-              <div class="chain-cell" id="chain-robinhood">
-                <span style="font-size: 32px; line-height: 44px;">&#x1FAB6;</span>
-                <span>Robinhood</span>
+              <div data-hf-id="hf-pj94" class="chain-cell" id="chain-robinhood">
+                <span data-hf-id="hf-04do" style="font-size: 36px; line-height: 48px;">🪶</span>
+                <span data-hf-id="hf-5mlh">Robinhood</span>
               </div>
             </div>
           </div>
@@ -454,43 +427,43 @@
       </div>
 
       <!-- Beat 6: Production Tips (33.5s–39.5s) -->
-      <div class="overlay-panel" id="beat6">
-        <div class="card">
-          <p class="card-eyebrow">Production Tips</p>
-          <h2 class="card-title">Connection resilience</h2>
-          <div class="card-scene">
-            <div class="feature-list">
-              <div class="check-row" id="check-reconnect">
-                <span class="check-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+      <div data-hf-id="hf-57cr" class="overlay-panel" id="beat6">
+        <div data-hf-id="hf-byql" class="card">
+          <p data-hf-id="hf-cx7e" class="card-eyebrow">Production Tips</p>
+          <h2 data-hf-id="hf-j3np" class="card-title">Connection resilience</h2>
+          <div data-hf-id="hf-8bnm" class="card-scene">
+            <div data-hf-id="hf-k4vr" class="feature-list">
+              <div data-hf-id="hf-jdav" class="check-row" id="check-reconnect">
+                <span data-hf-id="hf-da3b" class="check-icon">
+                  <svg data-hf-id="hf-kiv7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path data-hf-id="hf-ln1a" d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="check-text">Reconnect on drop</p>
-                  <p class="check-desc">Auto-retry with exponential backoff</p>
+                <div data-hf-id="hf-w8fr">
+                  <p data-hf-id="hf-3sp2" class="check-text">Reconnect on drop</p>
+                  <p data-hf-id="hf-24w0" class="check-desc">Auto-retry with exponential backoff</p>
                 </div>
               </div>
-              <div class="check-row" id="check-restore">
-                <span class="check-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+              <div data-hf-id="hf-xadq" class="check-row" id="check-restore">
+                <span data-hf-id="hf-srx3" class="check-icon">
+                  <svg data-hf-id="hf-o6bn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path data-hf-id="hf-38w2" d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="check-text">Restore subscriptions</p>
-                  <p class="check-desc">Re-subscribe after reconnection</p>
+                <div data-hf-id="hf-wmqs">
+                  <p data-hf-id="hf-zjit" class="check-text">Restore subscriptions</p>
+                  <p data-hf-id="hf-zkbo" class="check-desc">Re-subscribe after reconnection</p>
                 </div>
               </div>
-              <div class="check-row" id="check-backfill">
-                <span class="check-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
+              <div data-hf-id="hf-f1xy" class="check-row" id="check-backfill">
+                <span data-hf-id="hf-sdm2" class="check-icon">
+                  <svg data-hf-id="hf-ns0m" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path data-hf-id="hf-3n73" d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </span>
-                <div>
-                  <p class="check-text">Backfill missed events</p>
-                  <p class="check-desc">Replay gaps via REST fallback</p>
+                <div data-hf-id="hf-vftp">
+                  <p data-hf-id="hf-1627" class="check-text">Backfill missed events</p>
+                  <p data-hf-id="hf-afsz" class="check-desc">Replay gaps via REST fallback</p>
                 </div>
               </div>
             </div>
@@ -499,12 +472,12 @@
       </div>
 
       <!-- Outro -->
-      <section id="end" class="clip scene-end" data-start="45" data-duration="3" data-track-index="3">
-        <div class="end-grid" aria-hidden="true"></div>
-        <img class="end-logo" src="assets/tatum-logo-white.svg" alt="Tatum" />
-        <div class="end-cta-stage">
-          <p class="end-cta end-cta-1">Stream real-time <span class="accent">blockchain data</span></p>
-          <p class="end-cta end-cta-2">docs.tatum.io</p>
+      <section data-hf-id="hf-wmg8" id="end" class="clip scene-end" data-start="45" data-duration="3" data-track-index="3">
+        <div data-hf-id="hf-2pm1" class="end-grid" aria-hidden="true"></div>
+        <img data-hf-id="hf-j2fw" class="end-logo" src="assets/tatum-logo-white.svg" alt="Tatum">
+        <div data-hf-id="hf-5tzj" class="end-cta-stage">
+          <p data-hf-id="hf-6ved" class="end-cta end-cta-1">Stream real-time <span data-hf-id="hf-8g6j" class="accent">blockchain data</span></p>
+          <p data-hf-id="hf-ltbo" class="end-cta end-cta-2">docs.tatum.io</p>
         </div>
       </section>
     </div>
