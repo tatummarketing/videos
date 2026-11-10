@@ -615,8 +615,24 @@
       tl.to('#beat6', { opacity: 0, scale: 0.96, duration: 0.4, ease: 'power2.in' }, 37.0);
       tl.set('#beat6', { visibility: 'hidden' }, 37.4);
 
-      /* ---- placeholder end so timeline has full duration ---- */
-      tl.to({}, { duration: 0.1 }, 47.9);
+      /* ==== OUTRO (44.5s–48s) ==== */
+      /* fade corner logo and speaker */
+      tl.to(cornerLogo, { opacity: 0, duration: 0.3, ease: 'power2.in' }, 44.5);
+      tl.to(videoLayer, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 44.5);
+      tl.set(videoLayer, { visibility: 'hidden' }, 45.0);
+
+      /* end card appears (framework manages #end clip visibility via data-start) */
+      tl.to('.end-logo', { opacity: 1, scale: 1, duration: 0.46, ease: 'power2.out' }, 45.2);
+
+      /* CTA line 1 in */
+      tl.to('.end-cta-1', { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }, 45.8);
+      /* CTA line 1 out, line 2 in (rotate) */
+      tl.to('.end-cta-1', { opacity: 0, y: -12, duration: 0.28, ease: 'power2.in' }, 46.8);
+      tl.to('.end-cta-2', { opacity: 1, y: 0, duration: 0.32, ease: 'power2.out' }, 47.0);
+      /* hold until 48s */
+      tl.to({}, { duration: 0.8 }, 47.2);
+
+      if (!/[?&]render=1/.test(location.search)) tl.play(0);
 
       window.__timelines['main'] = tl;
     </script>
