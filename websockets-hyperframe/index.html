@@ -528,6 +528,15 @@
       gsap.set(introText, { opacity: 0, visibility: 'hidden' });
       gsap.set('.intro-eyebrow, .intro-accent, .intro-product', { opacity: 0, y: 20 });
 
+      /* ---- overlay panel initial states ---- */
+      gsap.set('#beat2, #beat3, #beat4, #beat5, #beat6', { opacity: 0, visibility: 'hidden', scale: 0.96 });
+      gsap.set('.end-logo', { opacity: 0, scale: 0.92 });
+      gsap.set('.end-cta', { opacity: 0, y: 16 });
+      gsap.set('.feature-row, .check-row', { x: 22 });
+      gsap.set('.pill', { scale: 0.85 });
+      gsap.set('.chain-cell', { scale: 0.85 });
+      gsap.set('.ws-event-pill', { x: -10 });
+
       /* ---- lower third: in at 0.6s, out at 4s ---- */
       tl.set(lowerThird, { visibility: 'visible' }, 0.6);
       tl.to(lowerThird, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 0.6);
@@ -545,7 +554,66 @@
       tl.to(introText, { opacity: 0, y: -10, duration: 0.32, ease: 'power2.in' }, 4.2);
       tl.set(introText, { visibility: 'hidden' }, 4.52);
 
-      /* ---- overlay beats will be added in Task 3 ---- */
+      /* ==== BEAT 2: Persistent Connection (4.5s-9s) ==== */
+      tl.set('#beat2', { visibility: 'visible' }, 4.5);
+      tl.to('#beat2', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 4.5);
+      tl.to('.ws-event-1', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 5.5);
+      tl.to('.ws-event-2', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 6.5);
+      tl.to('.ws-event-3', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 7.5);
+      /* exit */
+      tl.to('#beat2', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 8.6);
+      tl.set('#beat2', { visibility: 'hidden' }, 8.95);
+
+      /* ==== BEAT 3: Subscription Types (9s-16s) ==== */
+      tl.set('#beat3', { visibility: 'visible' }, 9.0);
+      tl.to('#beat3', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 9.0);
+      /* feature rows waterfall in as speaker names them */
+      tl.to('#row-blocks', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 9.8);
+      tl.to('#row-tx', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 10.8);
+      tl.to('#row-accounts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 11.6);
+      tl.to('#row-contracts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 12.5);
+      /* JSON snippet on "readable JSON" */
+      tl.to('#jsonSnippet', { opacity: 1, duration: 0.3, ease: 'power2.out' }, 14.0);
+      /* exit during natural pause at ~16.2s */
+      tl.to('#beat3', { opacity: 0, x: -20, duration: 0.35, ease: 'power2.in' }, 15.8);
+      tl.set('#beat3', { visibility: 'hidden' }, 16.15);
+
+      /* ==== BEAT 4: Use Cases & Integration (16.8s-22s) ==== */
+      tl.set('#beat4', { visibility: 'visible' }, 16.8);
+      tl.to('#beat4', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 16.8);
+      /* pills appear as speaker names each use case */
+      tl.to('#pill-wallets', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 18.5);
+      tl.to('#pill-dashboards', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 19.2);
+      tl.to('#pill-defi', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 19.8);
+      tl.to('#pill-monitoring', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 20.5);
+      /* exit */
+      tl.to('#beat4', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 21.6);
+      tl.set('#beat4', { visibility: 'hidden' }, 21.95);
+
+      /* ==== BEAT 5: Supported Chains (22s-27s) ==== */
+      tl.set('#beat5', { visibility: 'visible' }, 22.0);
+      tl.to('#beat5', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 22.0);
+      /* chains appear as speaker names each */
+      tl.to('#chain-solana', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 23.0);
+      tl.to('#chain-ethereum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 23.5);
+      tl.to('#chain-polygon', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 24.0);
+      tl.to('#chain-arbitrum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 24.5);
+      tl.to('#chain-bsc', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 25.0);
+      tl.to('#chain-robinhood', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 25.5);
+      /* exit during natural pause at ~26.2s */
+      tl.to('#beat5', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 26.2);
+      tl.set('#beat5', { visibility: 'hidden' }, 26.55);
+
+      /* ==== BEAT 6: Production Tips (27s-38s) ==== */
+      tl.set('#beat6', { visibility: 'visible' }, 27.0);
+      tl.to('#beat6', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 27.0);
+      /* checklist rows stagger in */
+      tl.to('#check-reconnect', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 28.5);
+      tl.to('#check-restore', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 30.0);
+      tl.to('#check-backfill', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 31.5);
+      /* exit -- return to clean speaker for CTA */
+      tl.to('#beat6', { opacity: 0, scale: 0.96, duration: 0.4, ease: 'power2.in' }, 37.0);
+      tl.set('#beat6', { visibility: 'hidden' }, 37.4);
 
       /* ---- placeholder end so timeline has full duration ---- */
       tl.to({}, { duration: 0.1 }, 47.9);
