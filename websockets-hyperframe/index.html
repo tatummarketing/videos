@@ -290,7 +290,7 @@
         <p class="intro-product">streaming, zero polling</p>
       </div>
 
-      <!-- Beat 2: Persistent Connection (4.5s-9s) -->
+      <!-- Beat 2: Persistent Connection (3.8s–9.6s) -->
       <div class="overlay-panel" id="beat2">
         <div class="card">
           <p class="card-eyebrow">WebSocket Subscriptions</p>
@@ -310,7 +310,7 @@
         </div>
       </div>
 
-      <!-- Beat 3: Subscription Types (9s-16s) -->
+      <!-- Beat 3: Subscription Types (10.0s–16.2s) -->
       <div class="overlay-panel" id="beat3">
         <div class="card">
           <p class="card-eyebrow">Event Types</p>
@@ -370,7 +370,7 @@
         </div>
       </div>
 
-      <!-- Beat 4: Use Cases (16.8s-22s) -->
+      <!-- Beat 4: Use Cases (16.7s–26.2s) -->
       <div class="overlay-panel" id="beat4">
         <div class="card">
           <p class="card-eyebrow">Integration</p>
@@ -417,7 +417,7 @@
         </div>
       </div>
 
-      <!-- Beat 5: Supported Chains (22s-27s) -->
+      <!-- Beat 5: Supported Chains (26.5s–33.2s) -->
       <div class="overlay-panel" id="beat5">
         <div class="card">
           <p class="card-eyebrow">Supported Chains</p>
@@ -453,7 +453,7 @@
         </div>
       </div>
 
-      <!-- Beat 6: Production Tips (27s-38s) -->
+      <!-- Beat 6: Production Tips (33.5s–39.5s) -->
       <div class="overlay-panel" id="beat6">
         <div class="card">
           <p class="card-eyebrow">Production Tips</p>
@@ -518,7 +518,7 @@
       const introText = document.getElementById('intro');
       const cornerLogo = document.querySelector('.corner-logo');
       const videoLayer = document.querySelector('.video-layer');
-      const sceneEnd = document.getElementById('end');
+      /* #end is a .clip — framework manages visibility via data-start="45" */
 
       /* ---- initial states ---- */
       tl.set('#avatar-video', { opacity: 1 }, 0);
@@ -537,88 +537,88 @@
       gsap.set('.chain-cell', { scale: 0.85 });
       gsap.set('.ws-event-pill', { x: -10 });
 
-      /* ---- lower third: in at 0.6s, out at 4s ---- */
+      /* ---- lower third: in at 0.6s, out at 3.5s ---- */
       tl.set(lowerThird, { visibility: 'visible' }, 0.6);
       tl.to(lowerThird, { opacity: 1, x: 0, duration: 0.42, ease: 'power3.out' }, 0.6);
       tl.to('.lt-name', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 0.8);
       tl.to('.lt-role', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 0.95);
       tl.to('.lt-logo img', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 1.1);
-      tl.to(lowerThird, { opacity: 0, x: -28, duration: 0.38, ease: 'power2.in' }, 4.0);
-      tl.set(lowerThird, { visibility: 'hidden' }, 4.38);
+      tl.to(lowerThird, { opacity: 0, x: -28, duration: 0.38, ease: 'power2.in' }, 3.5);
+      tl.set(lowerThird, { visibility: 'hidden' }, 3.88);
 
-      /* ---- intro title: in at 0.4s, out at 4.2s ---- */
+      /* ---- intro title: in at 0.4s, out at 3.5s ---- */
       tl.set(introText, { visibility: 'visible', opacity: 1 }, 0.4);
       tl.to('.intro-eyebrow', { opacity: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.45);
       tl.to('.intro-accent', { opacity: 1, y: 0, duration: 0.24, ease: 'power3.out' }, 1.3);
       tl.to('.intro-product', { opacity: 1, y: 0, duration: 0.22, ease: 'power3.out' }, 2.5);
-      tl.to(introText, { opacity: 0, y: -10, duration: 0.32, ease: 'power2.in' }, 4.2);
-      tl.set(introText, { visibility: 'hidden' }, 4.52);
+      tl.to(introText, { opacity: 0, y: -10, duration: 0.32, ease: 'power2.in' }, 3.5);
+      tl.set(introText, { visibility: 'hidden' }, 3.82);
 
-      /* ==== BEAT 2: Persistent Connection (4.5s-9s) ==== */
-      tl.set('#beat2', { visibility: 'visible' }, 4.5);
-      tl.to('#beat2', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 4.5);
-      tl.to('.ws-event-1', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 5.5);
-      tl.to('.ws-event-2', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 6.5);
-      tl.to('.ws-event-3', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 7.5);
+      /* ==== BEAT 2: Persistent Connection (3.8s–9.6s) ==== */
+      tl.set('#beat2', { visibility: 'visible' }, 3.8);
+      tl.to('#beat2', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 3.8);
+      tl.to('.ws-event-1', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 7.3);
+      tl.to('.ws-event-2', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 7.9);
+      tl.to('.ws-event-3', { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }, 8.8);
       /* exit */
-      tl.to('#beat2', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 8.6);
-      tl.set('#beat2', { visibility: 'hidden' }, 8.95);
+      tl.to('#beat2', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 9.5);
+      tl.set('#beat2', { visibility: 'hidden' }, 9.85);
 
-      /* ==== BEAT 3: Subscription Types (9s-16s) ==== */
-      tl.set('#beat3', { visibility: 'visible' }, 9.0);
-      tl.to('#beat3', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 9.0);
+      /* ==== BEAT 3: Subscription Types (10.0s–16.2s) ==== */
+      tl.set('#beat3', { visibility: 'visible' }, 10.0);
+      tl.to('#beat3', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 10.0);
       /* feature rows waterfall in as speaker names them */
-      tl.to('#row-blocks', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 9.8);
-      tl.to('#row-tx', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 10.8);
-      tl.to('#row-accounts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 11.6);
-      tl.to('#row-contracts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 12.5);
+      tl.to('#row-blocks', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 10.8);
+      tl.to('#row-tx', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 11.4);
+      tl.to('#row-accounts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 12.2);
+      tl.to('#row-contracts', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 12.7);
       /* JSON snippet on "readable JSON" */
-      tl.to('#jsonSnippet', { opacity: 1, duration: 0.3, ease: 'power2.out' }, 14.0);
+      tl.to('#jsonSnippet', { opacity: 1, duration: 0.3, ease: 'power2.out' }, 15.3);
       /* exit during natural pause at ~16.2s */
-      tl.to('#beat3', { opacity: 0, x: -20, duration: 0.35, ease: 'power2.in' }, 15.8);
-      tl.set('#beat3', { visibility: 'hidden' }, 16.15);
+      tl.to('#beat3', { opacity: 0, x: -20, duration: 0.35, ease: 'power2.in' }, 16.0);
+      tl.set('#beat3', { visibility: 'hidden' }, 16.35);
 
-      /* ==== BEAT 4: Use Cases & Integration (16.8s-22s) ==== */
-      tl.set('#beat4', { visibility: 'visible' }, 16.8);
-      tl.to('#beat4', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 16.8);
+      /* ==== BEAT 4: Use Cases & Integration (16.7s–26.2s) ==== */
+      tl.set('#beat4', { visibility: 'visible' }, 16.7);
+      tl.to('#beat4', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 16.7);
       /* pills appear as speaker names each use case */
-      tl.to('#pill-wallets', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 18.5);
-      tl.to('#pill-dashboards', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 19.2);
-      tl.to('#pill-defi', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 19.8);
-      tl.to('#pill-monitoring', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 20.5);
+      tl.to('#pill-wallets', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 22.7);
+      tl.to('#pill-dashboards', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 23.6);
+      tl.to('#pill-defi', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 24.4);
+      tl.to('#pill-monitoring', { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 25.1);
       /* exit */
-      tl.to('#beat4', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 21.6);
-      tl.set('#beat4', { visibility: 'hidden' }, 21.95);
+      tl.to('#beat4', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 25.8);
+      tl.set('#beat4', { visibility: 'hidden' }, 26.15);
 
-      /* ==== BEAT 5: Supported Chains (22s-27s) ==== */
-      tl.set('#beat5', { visibility: 'visible' }, 22.0);
-      tl.to('#beat5', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 22.0);
+      /* ==== BEAT 5: Supported Chains (26.5s–33.2s) ==== */
+      tl.set('#beat5', { visibility: 'visible' }, 26.5);
+      tl.to('#beat5', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 26.5);
       /* chains appear as speaker names each */
-      tl.to('#chain-solana', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 23.0);
-      tl.to('#chain-ethereum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 23.5);
-      tl.to('#chain-polygon', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 24.0);
-      tl.to('#chain-arbitrum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 24.5);
-      tl.to('#chain-bsc', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 25.0);
-      tl.to('#chain-robinhood', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 25.5);
-      /* exit during natural pause at ~26.2s */
-      tl.to('#beat5', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 26.2);
-      tl.set('#beat5', { visibility: 'hidden' }, 26.55);
+      tl.to('#chain-solana', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 28.2);
+      tl.to('#chain-ethereum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 29.1);
+      tl.to('#chain-polygon', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 30.0);
+      tl.to('#chain-arbitrum', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 30.8);
+      tl.to('#chain-bsc', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 31.7);
+      tl.to('#chain-robinhood', { opacity: 1, scale: 1, duration: 0.28, ease: 'back.out(1.6)' }, 32.6);
+      /* exit after "Robinhood." ends at ~33.2s */
+      tl.to('#beat5', { opacity: 0, scale: 0.96, duration: 0.35, ease: 'power2.in' }, 33.0);
+      tl.set('#beat5', { visibility: 'hidden' }, 33.35);
 
-      /* ==== BEAT 6: Production Tips (27s-38s) ==== */
-      tl.set('#beat6', { visibility: 'visible' }, 27.0);
-      tl.to('#beat6', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 27.0);
+      /* ==== BEAT 6: Production Tips (33.5s–39.5s) ==== */
+      tl.set('#beat6', { visibility: 'visible' }, 33.5);
+      tl.to('#beat6', { opacity: 1, scale: 1, duration: 0.45, ease: 'back.out(1.2)' }, 33.5);
       /* checklist rows stagger in */
-      tl.to('#check-reconnect', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 28.5);
-      tl.to('#check-restore', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 30.0);
-      tl.to('#check-backfill', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 31.5);
+      tl.to('#check-reconnect', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 36.0);
+      tl.to('#check-restore', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 37.0);
+      tl.to('#check-backfill', { opacity: 1, x: 0, duration: 0.32, ease: 'power2.out' }, 38.2);
       /* exit -- return to clean speaker for CTA */
-      tl.to('#beat6', { opacity: 0, scale: 0.96, duration: 0.4, ease: 'power2.in' }, 37.0);
-      tl.set('#beat6', { visibility: 'hidden' }, 37.4);
+      tl.to('#beat6', { opacity: 0, scale: 0.96, duration: 0.4, ease: 'power2.in' }, 39.3);
+      tl.set('#beat6', { visibility: 'hidden' }, 39.65);
 
-      /* ==== OUTRO (44.5s–48s) ==== */
+      /* ==== OUTRO (44.0s–48s) ==== */
       /* fade corner logo and speaker */
-      tl.to(cornerLogo, { opacity: 0, duration: 0.3, ease: 'power2.in' }, 44.5);
-      tl.to(videoLayer, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 44.5);
+      tl.to(cornerLogo, { opacity: 0, duration: 0.3, ease: 'power2.in' }, 44.0);
+      tl.to(videoLayer, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 44.0);
       tl.set(videoLayer, { visibility: 'hidden' }, 45.0);
 
       /* end card appears (framework manages #end clip visibility via data-start) */
